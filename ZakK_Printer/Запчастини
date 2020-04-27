@@ -1,0 +1,120 @@
+	String[] s_mas_MarkaP = { "Xerox", "Canon", "Panasonic", "Epson", "HP",
+			"Brother" };
+	// String[] s_mas_ModelXerox = { "3210", "3220", "AltaLink B8045", "PE120",
+	// "4400", "3122", "3120", "3121", "3210", "3250", "3450", "4500",
+	// "4510", "4620", "5500", "6100", "238", "3335", "123", "3225",
+	// "3315", "3345", "5775", "5865", "245", "5638", "5645", "5745",
+	// "М15", "РЕ16", "5020", "3325", "2020" };
+	String[] s_mas_ModelXerox = { "3250", "3220", "3315", "3345", "3210",
+			"PE120", "AltaLink B8045", "4510", "5020", "5638", "238", "5745",
+			"4400", "3122", "3120", "3121", "3450", "4500", "5775", "5945" };
+	String[] s_mas_ModelCanon = { "6255i" };
+	String[] s_mas_ModelPanasonic = { "1320", "1530" };
+	String[] s_mas_ModelEpson = { "L805", "L1300", "WF-M5690" };
+	String[] s_mas_ModelHP = { "1200", "1320", "WF-M5690" };
+	String[] s_mas_ModelBrother = { "4800", "FAX2920R" };
+	
+	
+		@SuppressWarnings({ "rawtypes", "unchecked" })
+	JComboBox cB_Marka = new JComboBox(s_mas_MarkaP);
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	JComboBox cB_Model = new JComboBox(s_mas_ModelXerox);
+	
+	
+			cB_Marka.addActionListener(new ActionListener() {
+			@SuppressWarnings({ "unchecked", "rawtypes" })
+			public void actionPerformed(ActionEvent e) {
+				if (cB_Marka.getSelectedItem().equals("Xerox")) {
+					// Полностью переопределяем все элементы
+					cB_Model.setModel(new DefaultComboBoxModel(s_mas_ModelXerox));
+				}
+				if (cB_Marka.getSelectedItem().equals("Canon")) {
+					// Полностью переопределяем все элементы
+					cB_Model.setModel(new DefaultComboBoxModel(s_mas_ModelCanon));
+				}
+				if (cB_Marka.getSelectedItem().equals("Panasonic")) {
+					// Полностью переопределяем все элементы
+					cB_Model.setModel(new DefaultComboBoxModel(
+							s_mas_ModelPanasonic));
+				}
+				if (cB_Marka.getSelectedItem().equals("Epson")) {
+					// Полностью переопределяем все элементы
+					cB_Model.setModel(new DefaultComboBoxModel(s_mas_ModelEpson));
+				}
+				if (cB_Marka.getSelectedItem().equals("HP")) {
+					// Полностью переопределяем все элементы
+					cB_Model.setModel(new DefaultComboBoxModel(s_mas_ModelHP));
+				}
+				if (cB_Marka.getSelectedItem().equals("Brother")) {
+					// Полностью переопределяем все элементы
+					cB_Model.setModel(new DefaultComboBoxModel(
+							s_mas_ModelBrother));
+				}
+			}
+		});
+	
+	
+		
+		
+		//
+//		{ // початкове відображення Місця 2 рівня
+//			for (String path : Menu.fileInDirect(s_Path_Mictce
+//					+ "Central office")) {
+//				al_Mictce2.add(path); // отримуємо список місць 2 в центральному
+//										// офісі
+//				// System.out.println(al_Mictce2);
+//			}
+//
+//			// переписуємо ArrayList із місцями 2 рівня в стрінговий масив, щоб
+//			// потім його записати в ЧекБокс
+//			s_mas_Misctce2 = al_Mictce2.toArray(new String[al_Mictce2.size()]);
+//		}
+//		
+//		{ // початкове відображення Марки принтера
+//			for (String path : Menu.fileInDirect(s_Path_Mictce
+//					+ "Central office/1 Поверх - 108")) {
+//				al_Marka.add(path); // отримуємо список моделей принтерів в каб. 108 ЦО
+//				 System.out.println(al_Marka);
+//			}
+//
+//			// переписуємо ArrayList із моделями принтерів в стрінговий масив, щоб
+//			// потім його записати в ЧекБокс
+//			s_mas_Marka = al_Marka.toArray(new String[al_Marka.size()]);
+//		}
+//		
+//		{ // початкове відображення Моделі принтера
+//			for (String path : Menu.fileInDirect(s_Path_Mictce
+//					+ "Central office/1 Поверх - 108/Xerox")) {
+//				al_Model.add(path); // отримуємо список моделей принтерів в каб. 108 ЦО
+//				 System.out.println(al_Model);
+//			}
+//
+//			// переписуємо ArrayList із моделями принтерів в стрінговий масив, щоб
+//			// потім його записати в ЧекБокс
+//			s_mas_Model = al_Model.toArray(new String[al_Model.size()]);
+//		}
+
+
+		//код не потрібен, осткільки розроблено гнучку систему (*1)
+//				// перевіряємо ЧекБокс першого рівня та визначаємо шлях для 2
+//				// рівня
+//				if (cB_Mistse.getSelectedItem().equals("Central office")) {
+//					for (String path : Menu.fileInDirect(s_Path_Mictce
+//							+ "Central office")) {
+//						al_Mictce2.add(path); // отримуємо список місць 2 в
+//												// центральному офісі
+//					}
+//				}
+//				if (cB_Mistse.getSelectedItem().equals("Ірпінь")) {
+//					for (String path : Menu.fileInDirect(s_Path_Mictce
+//							+ "Ірпінь")) {
+//						al_Mictce2.add(path); // отримуємо список місць 2 в
+//												// центральному офісі
+//					}
+//				}
+//		*1
+//				for (String path : Menu.fileInDirect(s_Path_Mictce
+//					+ (String) cB_Mistse.getSelectedItem())) {
+//					al_Mictce2.add(path);
+//				}
+
