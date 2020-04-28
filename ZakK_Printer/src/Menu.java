@@ -5,7 +5,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -26,8 +25,6 @@ public class Menu extends JFrame {
 
 	String s_Path_Mictce = "C:/ZakK_Printer/baza/";
 	
-	
-	
 	public Menu(final String s_NameProduct) {
 		super(s_NameProduct);
 
@@ -36,6 +33,9 @@ public class Menu extends JFrame {
 		setResizable(false);
 		setLocationRelativeTo(null);
 		getContentPane().setLayout(null);
+		
+		// лого (в треї) на панелі задач
+		setIconImage(Toolkit.getDefaultToolkit().getImage(new File("res/ZakK.png").toString()));
 
 		label_Shapka = new JLabel("\u041E\u0431\u043B\u0456\u043A \u043F\u0440\u0438\u043D\u0442\u0435\u0440\u0456\u0432 \u0442\u0430 \u043A\u0430\u0440\u0442\u0440\u0438\u0434\u0436\u0456\u0432");
 		label_Shapka.setBackground(new Color(165, 42, 42));
@@ -115,32 +115,31 @@ public class Menu extends JFrame {
 		getContentPane().add(b_Doc);
 						
 						JButton b_DovidkovaInfom = new JButton("\u0414\u043E\u0432\u0456\u0434\u043A\u043E\u0432\u0430 \u0456\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0456\u044F");
+						b_DovidkovaInfom.addActionListener(new ActionListener() {
+							public void actionPerformed(ActionEvent arg0) {
+							}
+						});
 						b_DovidkovaInfom.setForeground(Color.BLACK);
 						b_DovidkovaInfom.setFont(new Font("Impact", Font.PLAIN, 25));
 						b_DovidkovaInfom.setBounds(62, 324, 295, 36);
 						getContentPane().add(b_DovidkovaInfom);
 						
 						JButton button = new JButton("\u041D\u0430\u043B\u0430\u0448\u0442\u0443\u0432\u0430\u043D\u043D\u044F (\u0437\u043D\u0430\u0445\u043E\u0434\u0436\u0435\u043D\u043D\u044F \u0431\u0430\u0437\u0438)");
-						button.addActionListener(new ActionListener() {
-							public void actionPerformed(ActionEvent arg0) {
-								
-							}
-						});
 						button.setForeground(Color.BLACK);
 						button.setFont(new Font("Impact", Font.PLAIN, 25));
 						button.setBounds(62, 371, 295, 36);
 						getContentPane().add(button);
-				
-						l_kartunku = new JLabel("");
-						//		l_kartunku.setIcon(new ImageIcon("res/kartunka/kartunka_Avtoruzacia.png"));
-								l_kartunku.setBounds(-1, 0, 995, 565);
-								getContentPane().add(l_kartunku);
-
-
-						setIconImage(Toolkit.getDefaultToolkit().getImage(new File("res/icon_save.png").toString()));
-						    
-							
 								
+								JLabel label = new JLabel("* \u0421\u0435\u0440\u0456\u0439\u043D\u0438\u0439 \u043D\u043E\u043C\u0435\u0440 \u043C\u0430\u0454 \u0431\u0443\u0442\u0438 \u0443\u043D\u0456\u043A\u0430\u043B\u044C\u043D\u0438\u043C");
+								label.setBounds(62, 443, 403, 14);
+								getContentPane().add(label);
+								
+										l_kartunku = new JLabel("");
+										//		l_kartunku.setIcon(new ImageIcon("res/kartunka/kartunka_Avtoruzacia.png"));
+												l_kartunku.setBounds(-1, 0, 995, 565);
+												getContentPane().add(l_kartunku);
+
+
 		setVisible(true);
 	}
 	

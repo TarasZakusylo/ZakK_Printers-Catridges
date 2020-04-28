@@ -151,7 +151,9 @@ public class PrynteryAdd extends JFrame {
 				tF_IN.setText("");
 				tF_Stan.setText("");
 				tA_Koment.setText("");
-
+				tF_SN.setText("");
+				tF_MOL.setText("");
+				
 				cB_Marka.setModel(new DefaultComboBoxModel());
 				cB_Model.setModel(new DefaultComboBoxModel());
 
@@ -173,11 +175,10 @@ public class PrynteryAdd extends JFrame {
 				// Полностью переопределяем все элементы
 				cB_Mistse2.setModel(new DefaultComboBoxModel(s_mas_Misctce2));
 
-				b_Misce2.setBounds(273, 123, 227, 20);
-
 				revalidate();
 			}
 		});
+		
 
 		label_Shapka = new JLabel(
 				"\u0414\u043E\u0434\u0430\u0432\u0430\u043D\u043D\u044F \u043F\u0440\u0438\u043D\u0442\u0435\u0440\u0456\u0432");
@@ -236,6 +237,8 @@ public class PrynteryAdd extends JFrame {
 				tF_IN.setText("");
 				tF_Stan.setText("");
 				tA_Koment.setText("");
+				tF_SN.setText("");
+				tF_MOL.setText("");
 
 				cB_Model.setModel(new DefaultComboBoxModel());
 
@@ -257,8 +260,6 @@ public class PrynteryAdd extends JFrame {
 				// Полностью переопределяем все элементы
 				cB_Marka.setModel(new DefaultComboBoxModel(s_mas_Marka));
 
-				b_Marka.setBounds(273, 179, 227, 20);
-
 				revalidate();
 			}
 		});
@@ -278,6 +279,8 @@ public class PrynteryAdd extends JFrame {
 				tF_IN.setText("");
 				tF_Stan.setText("");
 				tA_Koment.setText("");
+				tF_SN.setText("");
+				tF_MOL.setText("");
 
 				al_Model.add("");
 
@@ -297,11 +300,10 @@ public class PrynteryAdd extends JFrame {
 				// Полностью переопределяем все элементы
 				cB_Model.setModel(new DefaultComboBoxModel(s_mas_Model));
 
-				b_Model.setBounds(273, 236, 227, 20);
-
 				revalidate();
 			}
 		});
+
 
 		cB_Model.setBounds(27, 236, 227, 20);
 		getContentPane().add(cB_Model);
@@ -316,6 +318,8 @@ public class PrynteryAdd extends JFrame {
 				tF_IN.setText("");
 				tF_Stan.setText("");
 				tA_Koment.setText("");
+				tF_SN.setText("");
+				tF_MOL.setText("");
 
 				al_SN.add("");
 
@@ -384,95 +388,127 @@ public class PrynteryAdd extends JFrame {
 
 				// Підтвердження на основі додаткового вікна
 				// JOptionPane.showOptionDialog
-				Object[] options_Save = { "Так", "Ні" };
-				int i_Save = JOptionPane.showOptionDialog(null,
-						"Зберегти зміни ?", "Подтверждение",
-						JOptionPane.YES_NO_OPTION,
-						JOptionPane.QUESTION_MESSAGE, null, options_Save, null);
-				if (i_Save == JOptionPane.YES_OPTION) {
+//				setAlwaysOnTop(false); // змінюємо вікно , що є поверх всіх
+										// інших
 
-					// IP
-					try {
-						String s_Path_IP = s_Path_Mictce
+				if (tF_SN.getText().equals(null) 
+						|| tF_SN.getText().equals("")
+						|| tF_SN.getText().equals(" ")
+						|| tF_SN.getText().equals("  ")
+						|| tF_SN.getText().equals("   ")) {
+					komentar("Ви не ввели серійний номер. Збереження неможливе.");
+				} else {
+
+					if (poshukPruntera(tF_SN.getText()) == 0) {
+
+						// створюємо каталог, що міститиме дані про принтер
+						File file = new File(s_Path_Mictce
 								+ (String) cB_Mistse.getSelectedItem() + "/"
 								+ (String) cB_Mistse2.getSelectedItem() + "/"
 								+ (String) cB_Marka.getSelectedItem() + "/"
 								+ (String) cB_Model.getSelectedItem() + "/"
-								+ (String) tF_SN.getText() + "/IP";
-						formatter_IP = new Formatter(s_Path_IP);
-					} catch (Exception e) {
-						JOptionPane.showMessageDialog(null,
-								"Не вдалось зберегти ІР");
-					}
-					formatter_IP.format(tF_IP_USB.getText());
-					formatter_IP.close();
+								+ tF_SN.getText());
+						file.mkdir();
 
-					// Інв
-					try {
-						String s_Path_Inv = s_Path_Mictce
-								+ (String) cB_Mistse.getSelectedItem() + "/"
-								+ (String) cB_Mistse2.getSelectedItem() + "/"
-								+ (String) cB_Marka.getSelectedItem() + "/"
-								+ (String) cB_Model.getSelectedItem() + "/"
-								+ (String) tF_SN.getText() + "/Інв";
-						formatter_Inv = new Formatter(s_Path_Inv);
-					} catch (Exception e) {
-						JOptionPane.showMessageDialog(null,
-								"Не вдалось зберегти Інвентарний");
-					}
-					formatter_Inv.format(tF_IN.getText());
-					formatter_Inv.close();
+						// IP
+						try {
+							String s_Path_IP = s_Path_Mictce
+									+ (String) cB_Mistse.getSelectedItem()
+									+ "/"
+									+ (String) cB_Mistse2.getSelectedItem()
+									+ "/" + (String) cB_Marka.getSelectedItem()
+									+ "/" + (String) cB_Model.getSelectedItem()
+									+ "/" + tF_SN.getText() + "/IP";
+							formatter_IP = new Formatter(s_Path_IP);
+							formatter_IP.format(tF_IP_USB.getText());
+							formatter_IP.close();
+						} catch (Exception e) {
+							komentar("Не вдалось зберегти ІР");
+						}
 
-					// Стан
-					try {
-						String s_Path_Stan = s_Path_Mictce
-								+ (String) cB_Mistse.getSelectedItem() + "/"
-								+ (String) cB_Mistse2.getSelectedItem() + "/"
-								+ (String) cB_Marka.getSelectedItem() + "/"
-								+ (String) cB_Model.getSelectedItem() + "/"
-								+ (String) tF_SN.getText() + "/Стан";
-						formatter_Stan = new Formatter(s_Path_Stan);
-					} catch (Exception e) {
-						JOptionPane.showMessageDialog(null,
-								"Не вдалось зберегти Стан");
-					}
-					formatter_Stan.format(tF_Stan.getText());
-					formatter_Stan.close();
+						// Інв
+						try {
+							String s_Path_Inv = s_Path_Mictce
+									+ (String) cB_Mistse.getSelectedItem()
+									+ "/"
+									+ (String) cB_Mistse2.getSelectedItem()
+									+ "/" + (String) cB_Marka.getSelectedItem()
+									+ "/" + (String) cB_Model.getSelectedItem()
+									+ "/" + tF_SN.getText() + "/IN";
+							formatter_Inv = new Formatter(s_Path_Inv);
+							formatter_Inv.format(tF_IN.getText());
+							formatter_Inv.close();
+						} catch (Exception e) {
+							komentar("Не вдалось зберегти Інвентарний");
+						}
 
-					// Koment
-					try {
-						String s_Path_Koment = s_Path_Mictce
-								+ (String) cB_Mistse.getSelectedItem() + "/"
-								+ (String) cB_Mistse2.getSelectedItem() + "/"
-								+ (String) cB_Marka.getSelectedItem() + "/"
-								+ (String) cB_Model.getSelectedItem() + "/"
-								+ (String) tF_SN.getText() + "/Комент";
-						formatter_Koment = new Formatter(s_Path_Koment);
-					} catch (Exception e) {
-						JOptionPane.showMessageDialog(null,
-								"Не вдалось зберегти Додаткову інформацію");
-					}
-					formatter_Koment.format(tA_Koment.getText());
-					formatter_Koment.close();
+						// Стан
+						try {
+							String s_Path_Stan = s_Path_Mictce
+									+ (String) cB_Mistse.getSelectedItem()
+									+ "/"
+									+ (String) cB_Mistse2.getSelectedItem()
+									+ "/" + (String) cB_Marka.getSelectedItem()
+									+ "/" + (String) cB_Model.getSelectedItem()
+									+ "/" + tF_SN.getText() + "/Stan";
+							formatter_Stan = new Formatter(s_Path_Stan);
+							formatter_Stan.format(tF_Stan.getText());
+							formatter_Stan.close();
+						} catch (Exception e) {
+							komentar("Не вдалось зберегти Стан");
+						}
 
-					// МОЛ
-					try {
-						String s_Path_MOL = s_Path_Mictce
-								+ (String) cB_Mistse.getSelectedItem() + "/"
-								+ (String) cB_Mistse2.getSelectedItem() + "/"
-								+ (String) cB_Marka.getSelectedItem() + "/"
-								+ (String) cB_Model.getSelectedItem() + "/"
-								+ (String) tF_SN.getText() + "/МОЛ";
-						formatter_MOL = new Formatter(s_Path_MOL);
-					} catch (Exception e) {
-						JOptionPane.showMessageDialog(null,
-								"Не вдалось зберегти МОЛ");
+						// Koment
+						try {
+							String s_Path_Koment = s_Path_Mictce
+									+ (String) cB_Mistse.getSelectedItem()
+									+ "/"
+									+ (String) cB_Mistse2.getSelectedItem()
+									+ "/" + (String) cB_Marka.getSelectedItem()
+									+ "/" + (String) cB_Model.getSelectedItem()
+									+ "/" + tF_SN.getText() + "/Coment";
+							formatter_Koment = new Formatter(s_Path_Koment);
+							formatter_Koment.format(tA_Koment.getText());
+							formatter_Koment.close();
+						} catch (Exception e) {
+							komentar("Не вдалось зберегти Додаткову інформацію");
+						}
+
+						// МОЛ
+						try {
+							String s_Path_MOL = s_Path_Mictce
+									+ (String) cB_Mistse.getSelectedItem()
+									+ "/"
+									+ (String) cB_Mistse2.getSelectedItem()
+									+ "/" + (String) cB_Marka.getSelectedItem()
+									+ "/" + (String) cB_Model.getSelectedItem()
+									+ "/" + tF_SN.getText() + "/MOL";
+							formatter_MOL = new Formatter(s_Path_MOL);
+							formatter_MOL.format(tF_MOL.getText());
+							formatter_MOL.close();
+						} catch (Exception e) {
+							komentar("Не вдалось зберегти МОЛ");
+						}
+
+						komentar("Інформацію збережено");
 					}
-					formatter_MOL.format(tF_MOL.getText());
-					formatter_MOL.close();
-					
-					JOptionPane.showMessageDialog(null, "Інформацію збережено");
 				}
+				// обнуляємо масиви
+				s_mas_Misctce2 = null;
+				al_Mictce2.clear();
+				s_mas_Marka = null;
+				al_Marka.clear();
+				s_mas_Model = null;
+				al_Model.clear(); // cB_Model
+				s_mas_SN = null;
+				al_SN.clear();
+
+				tF_IP_USB.setText("");
+				tF_IN.setText("");
+				tF_Stan.setText("");
+				tA_Koment.setText("");
+				tF_SN.setText("");
+				tF_MOL.setText("");
 			}
 		});
 		b_Save.setBounds(27, 531, 473, 29);
@@ -499,7 +535,7 @@ public class PrynteryAdd extends JFrame {
 		// };
 		// p_Ramka.setBounds(17, 329, 490, 197);
 		// getContentPane().add(p_Ramka);
-
+		
 		b_Misce.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				tF_Mistce.setBounds(273, 96, 196, 20);
@@ -508,34 +544,34 @@ public class PrynteryAdd extends JFrame {
 		});
 		b_Misce.setBounds(273, 68, 227, 20);
 		getContentPane().add(b_Misce);
-
+		
 		b_Misce2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent arg0) {				
 				tF_Mistce2.setBounds(273, 151, 196, 20);
-				l_SaveMisce2.setBounds(473, 146, 25, 25);
+				l_SaveMisce2.setBounds(473, 146, 25, 25);				
 			}
 		});
-		// b_Misce2.setBounds(273, 123, 227, 20);
+		b_Misce2.setBounds(273, 123, 227, 20);
 		getContentPane().add(b_Misce2);
-
+		
 		b_Marka.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				tF_Marka.setBounds(273, 207, 196, 20);
 				l_SaveMarka.setBounds(473, 203, 25, 25);
 			}
 		});
-		// b_Marka.setBounds(273, 179, 227, 20);
+		b_Marka.setBounds(273, 179, 227, 20);
 		getContentPane().add(b_Marka);
-
+		
 		b_Model.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
+			public void actionPerformed(ActionEvent arg0) {				
 				tF_Model.setBounds(273, 263, 196, 20);
 				l_SaveModel.setBounds(473, 258, 25, 25);
 			}
 		});
-		// b_Model.setBounds(273, 236, 227, 20);
+		b_Model.setBounds(273, 236, 227, 20);
 		getContentPane().add(b_Model);
-
+		
 		tF_Mistce = new JTextField();
 		tF_Mistce.setHorizontalAlignment(SwingConstants.CENTER);
 		tF_Mistce.setFont(new Font("Sitka Text", Font.PLAIN, 15));
@@ -544,52 +580,46 @@ public class PrynteryAdd extends JFrame {
 		l_SaveMisce.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent arg0) {
-				
 				if (tF_Mistce.getText().equals(null)
 						|| tF_Mistce.getText().equals("")
 						|| tF_Mistce.getText().equals(" ")
 						|| tF_Mistce.getText().equals("  ")
 						|| tF_Mistce.getText().equals("   ")) {
-					
-					setAlwaysOnTop(false);  // змінюємо вікно , що є поверх всіх інших
-					JOptionPane.showMessageDialog(null, "Ви не ввели назву місця розташування");
-					setAlwaysOnTop(true);
-					
+					komentar("Ви не ввели назву місця розташування");
 				} else {
 
-					if(al_Mictce.get(0) == ""){
-						al_Mictce.remove(0);  // удаляю перше значення у масиві, що відповідає за пусе поле в списку
+					if (al_Mictce.get(0) == "") {
+						al_Mictce.remove(0); // удаляю перше значення у масиві,
+							// що відповідає за пусе поле в списку
 					}
 
-					int i_MistciaNema = 0;
-					
+					int i_KatalogaNema = 0;
+
 					for (int i = 0; i < al_Mictce.size(); i++) {
-//						System.out.println(al_Mictce.get(i));
 						if (tF_Mistce.getText().equals(al_Mictce.get(i))) {
-							setAlwaysOnTop(false);  // змінюємо вікно , що є поверх всіх інших
-							JOptionPane.showMessageDialog(null, "Така назва уже існує");
-							setAlwaysOnTop(true);
-						}else{
-							i_MistciaNema = 1;
+							komentar("Така назва уже існує");
+							i_KatalogaNema = 1;
 						}
 					}
-					
-					if(i_MistciaNema == 1){
-						// створюємо новий каталог для вміщення в собі підкаталогів
-						File file = new File(s_Path_Mictce + "/" + tF_Mistce.getText());
-				        file.mkdir();
-				        
-				        setAlwaysOnTop(false);  // змінюємо вікно , що є поверх всіх інших
-						JOptionPane.showMessageDialog(null, "Місце добавлено");
-						setAlwaysOnTop(true);
-						
-						//добавляємо нове місце в список до старих
-						al_Mictce.add(tF_Mistce.getText());					
+
+					if (i_KatalogaNema == 0) {
+						// створюємо новий каталог для вміщення в собі
+						// підкаталогів
+						File file = new File(s_Path_Mictce
+								+ tF_Mistce.getText());
+						file.mkdir();
+
+						komentar("Місце добавлено");
+
+						// добавляємо нове місце в список до старих
+						al_Mictce.add(0,tF_Mistce.getText());   // добавляємо в початок списку
 						s_mas_Misctce = al_Mictce.toArray(new String[al_Mictce
 								.size()]);
-						cB_Mistse.setModel(new DefaultComboBoxModel(s_mas_Misctce));						
+						cB_Mistse.setModel(new DefaultComboBoxModel(
+								s_mas_Misctce));
+
+						al_Mictce2.add("");
 					}
-										
 				}
 			}
 		});
@@ -597,15 +627,59 @@ public class PrynteryAdd extends JFrame {
 		l_SaveMisce.setIcon(new ImageIcon("res/icon_save.png"));
 		getContentPane().add(l_SaveMisce);
 
-		// удалить
-		tF_Mistce.setBounds(273, 96, 196, 20);
-		l_SaveMisce.setBounds(473, 91, 25, 25);
-		//
-
 		tF_Mistce2 = new JTextField();
 		tF_Mistce2.setHorizontalAlignment(SwingConstants.CENTER);
 		tF_Mistce2.setFont(new Font("Sitka Text", Font.PLAIN, 15));
 		getContentPane().add(tF_Mistce2);
+		l_SaveMisce2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				if (tF_Mistce2.getText().equals(null)
+						|| tF_Mistce2.getText().equals("")
+						|| tF_Mistce2.getText().equals(" ")
+						|| tF_Mistce2.getText().equals("  ")
+						|| tF_Mistce2.getText().equals("   ")) {
+					komentar("Ви не ввели назву місця розташування");
+				} else {
+					
+					// удаляю перше значення у масиві, що відповідає
+					// за пусе поле в списку
+					if (al_Mictce2.get(0) == "") {
+						al_Mictce2.remove(0);
+					}
+
+					int i_KatalogaNema = 0;
+
+					for (int i = 0; i < al_Mictce2.size(); i++) {
+						if (tF_Mistce2.getText().equals(al_Mictce2.get(i))) {
+							komentar("Така назва уже існує");
+							i_KatalogaNema = 1;
+						}
+					}
+
+					if (i_KatalogaNema == 0) {
+						// створюємо новий каталог для вміщення в собі
+						// підкаталогів
+						
+						File file = new File(s_Path_Mictce 
+								+ (String) cB_Mistse.getSelectedItem()+ "/"
+										+ tF_Mistce2.getText());
+						file.mkdir();
+
+						komentar("Місце добавлено");
+
+						// добавляємо нове місце в список до старих
+						al_Mictce2.add(0,tF_Mistce2.getText());   // добавляємо в початок списку
+						s_mas_Misctce2 = al_Mictce2.toArray(new String[al_Mictce2
+								.size()]);
+						cB_Mistse2.setModel(new DefaultComboBoxModel(
+								s_mas_Misctce2));
+						
+						al_Marka.add("");
+					}
+				}
+			}
+		});
 
 		l_SaveMisce2.setIcon(new ImageIcon("res/icon_save.png"));
 		getContentPane().add(l_SaveMisce2);
@@ -619,9 +693,110 @@ public class PrynteryAdd extends JFrame {
 		tF_Model.setHorizontalAlignment(SwingConstants.CENTER);
 		tF_Model.setFont(new Font("Sitka Text", Font.PLAIN, 15));
 		getContentPane().add(tF_Model);
+		
+		l_SaveMarka.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				if (tF_Marka.getText().equals(null)
+						|| tF_Marka.getText().equals("")
+						|| tF_Marka.getText().equals(" ")
+						|| tF_Marka.getText().equals("  ")
+						|| tF_Marka.getText().equals("   ")) {
+					komentar("Ви не ввели назву місця розташування");
+				} else {
+					
+					// удаляю перше значення у масиві, що відповідає
+					// за пусе поле в списку
+					if (al_Marka.get(0) == "") {
+						al_Marka.remove(0);
+					}
+
+					int i_KatalogaNema = 0;
+
+					for (int i = 0; i < al_Marka.size(); i++) {
+						if (tF_Marka.getText().equals(al_Marka.get(i))) {
+							komentar("Така назва уже існує");
+							i_KatalogaNema = 1;
+						}
+					}
+
+					if (i_KatalogaNema == 0) {
+						// створюємо новий каталог для вміщення в собі
+						// підкаталогів
+						
+						File file = new File(s_Path_Mictce 
+								+ (String) cB_Mistse.getSelectedItem()+ "/"
+										+ (String) cB_Mistse2.getSelectedItem()+ "/"
+												+ tF_Marka.getText());
+						file.mkdir();
+
+						komentar("Місце добавлено");
+
+						// добавляємо нове місце в список до старих
+						al_Marka.add(0,tF_Marka.getText());   // добавляємо в початок списку
+						s_mas_Marka = al_Marka.toArray(new String[al_Marka
+								.size()]);
+						cB_Marka.setModel(new DefaultComboBoxModel(
+								s_mas_Marka));
+						
+						al_Model.add("");
+					}
+				}
+			}
+		});
 
 		l_SaveMarka.setIcon(new ImageIcon("res/icon_save.png"));
 		getContentPane().add(l_SaveMarka);
+		
+		l_SaveModel.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent arg0) {
+				if (tF_Model.getText().equals(null)
+						|| tF_Model.getText().equals("")
+						|| tF_Model.getText().equals(" ")
+						|| tF_Model.getText().equals("  ")
+						|| tF_Model.getText().equals("   ")) {
+					komentar("Ви не ввели назву місця розташування");
+				} else {
+					
+					// удаляю перше значення у масиві, що відповідає
+					// за пусе поле в списку
+					if (al_Model.get(0) == "") {
+						al_Model.remove(0);
+					}
+
+					int i_KatalogaNema = 0;
+
+					for (int i = 0; i < al_Model.size(); i++) {
+						if (tF_Model.getText().equals(al_Model.get(i))) {
+							komentar("Така назва уже існує");
+							i_KatalogaNema = 1;
+						}
+					}
+
+					if (i_KatalogaNema == 0) {
+						// створюємо новий каталог для вміщення в собі
+						// підкаталогів
+
+						File file = new File(s_Path_Mictce
+								+ (String) cB_Mistse.getSelectedItem() + "/"
+								+ (String) cB_Mistse2.getSelectedItem() + "/"
+								+ (String) cB_Marka.getSelectedItem() + "/" 
+								+ tF_Model.getText());
+						file.mkdir();
+
+						komentar("Місце добавлено");
+
+						// добавляємо нове місце в список до старих
+						al_Model.add(0,tF_Model.getText());   // добавляємо в початок списку
+						s_mas_Model = al_Model.toArray(new String[al_Model
+								.size()]);
+						cB_Model.setModel(new DefaultComboBoxModel(
+								s_mas_Model));
+					}
+				}
+			}
+		});
 
 		l_SaveModel.setIcon(new ImageIcon("res/icon_save.png"));
 		getContentPane().add(l_SaveModel);
@@ -653,6 +828,52 @@ public class PrynteryAdd extends JFrame {
 		// getContentPane().add(l_fon);
 		
 		setVisible(true);
+	}
 
+	int poshukPruntera (String s_SN_new){
+		
+		for (File for_Mistce : new File(s_Path_Mictce).listFiles()) {      
+			for (File for_Mistce1 : for_Mistce.listFiles()) {
+				for (File for_Marka : for_Mistce1.listFiles()) {
+					for (File for_Model : for_Marka.listFiles()) {
+						for (File for_SN : for_Model.listFiles()) {									
+								String s_for_Mistce = for_Mistce + "";
+								String s_for_Mistce1 = for_Mistce1 + "";
+//								String s_for_Marka = for_Marka + "";
+								String s_for_Model = for_Model + "";
+								
+								int i_for_Mistce = s_for_Mistce.length();
+								int i_for_Mistce1 = s_for_Mistce1.length();
+//								int i_for_Marka = s_for_Marka.length();
+								int i_for_Model = s_for_Model.length();
+								
+								String s_for_SN = "" + for_SN;
+
+								String s_Mistce = s_for_SN.substring(21, i_for_Mistce);
+								String s_Mistce1 = s_for_SN.substring(i_for_Mistce + 1, i_for_Mistce1);
+//								String s_Marka = s_for_SN.substring(i_for_Mistce1 + 1, i_for_Marka);
+//								String s_Model = s_for_SN.substring(i_for_Marka + 1, i_for_Model);										
+								String s_SN = s_for_SN.substring(i_for_Model + 1, s_for_SN.length());
+																
+								if(s_SN_new.equals(s_SN)){
+									setAlwaysOnTop(false);
+									JOptionPane.showMessageDialog(null, "Принтер із таким серійним номером уже існує ! \n"
+										+ "Він знаходиться:   " + s_Mistce + "   /   " + s_Mistce1);
+									setAlwaysOnTop(true);
+									return 1;
+								 }
+							}
+						}
+					}
+				}
+			}
+		return 0;
+	}
+
+	void komentar(String text) {
+		// змінюємо вікно , що є поверх всіх інших
+		setAlwaysOnTop(false); 
+		JOptionPane.showMessageDialog(null, text);
+		setAlwaysOnTop(true);
 	}
 }

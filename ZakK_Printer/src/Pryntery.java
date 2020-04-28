@@ -1,9 +1,5 @@
 import java.awt.Color;
 import java.awt.Font;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.Shape;
 import java.awt.TextArea;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -12,6 +8,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Formatter;
+import java.util.Iterator;
+import java.util.Scanner;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -21,7 +19,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-import javax.swing.JPanel;
+
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  * 
@@ -34,14 +34,14 @@ public class Pryntery extends JFrame{
 	private JButton b_Menu;
 	private JLabel l_fon;
 
-	public ArrayList<String> al_Mictce = new ArrayList<String>();
-	public ArrayList<String> al_Mictce2 = new ArrayList<String>();
+	public static ArrayList<String> al_Mistce = new ArrayList<String>();
+	public static ArrayList<String> al_Mistce1 = new ArrayList<String>();
 	public ArrayList<String> al_Model = new ArrayList<String>();
 	public ArrayList<String> al_Marka = new ArrayList<String>();
 	public ArrayList<String> al_SN = new ArrayList<String>();
 
-	String[] s_mas_Misctce = null;
-	String[] s_mas_Misctce2 = null;
+	static String[] s_mas_Mistce = null;
+	static String[] s_mas_Mistce1 = null;
 	String[] s_mas_Model = null;
 	String[] s_mas_Marka = null;
 	String[] s_mas_SN = null;
@@ -52,7 +52,7 @@ public class Pryntery extends JFrame{
 	String s_Stan = "";
 	String s_MOL = "";
 	
-	String s_Path_Mictce = "C:/ZakK_Printer/baza/";
+	static String s_Path_Mictce = "C:/ZakK_Printer/baza/";
 	
 	@SuppressWarnings("rawtypes")
 	JComboBox cB_Marka = new JComboBox();
@@ -68,13 +68,13 @@ public class Pryntery extends JFrame{
 	private final JLabel l_Mistse2 = new JLabel(
 			"\u0412\u0456\u0434\u0434\u0456\u043B / \u043A\u0430\u0431\u0456\u043D\u0435\u0442");
 	@SuppressWarnings("rawtypes")
-	private JComboBox cB_Mistse2 = new JComboBox();
+	private static JComboBox cB_Mistce1 = new JComboBox();
 	private JTextField tF_IN;
 	
 	private final JLabel l_Mistse = new JLabel(
 			"\u041C\u0456\u0441\u0446\u0435 \u0440\u043E\u0437\u0442\u0430\u0448\u0443\u0432\u0430\u043D\u043D\u044F");
 	@SuppressWarnings("rawtypes")
-	private JComboBox cB_Mistse = new JComboBox();
+	private static JComboBox cB_Mistse = new JComboBox();
 	private JTextField tF_IP_USB;
 	private final JLabel l_DodatkovaInfa = new JLabel("\u0414\u043E\u0434\u0430\u0442\u043A\u043E\u0432\u0430 \u0456\u043D\u0444\u043E\u0440\u043C\u0430\u0446\u0456\u044F:");
 	private TextArea tA_Koment = new TextArea();
@@ -89,8 +89,14 @@ public class Pryntery extends JFrame{
 	Formatter formatter_Stan;
 	Formatter formatter_MOL;
 	
+	Formatter formatter_kilkistPraciyiychuhPrynteriv;
+	
 	private final JLabel l_MOL = new JLabel("\u041C\u0430\u0442\u0435\u0440\u0456\u0430\u043B\u044C\u043D\u043E \u0432\u0456\u0434\u043F\u043E\u0432\u0456\u0434\u0430\u043B\u044C\u043D\u0430 \u043E\u0441\u043E\u0431\u0430");
 	private final JTextField tF_MOL = new JTextField();
+	private final JLabel l_textKilkistPraciyiychuhPrynteriv = new JLabel("\u041A\u0456\u043B\u044C\u043A\u0456\u0441\u0442\u044C \u043F\u0440\u0430\u0446\u044E\u044E\u0447\u0438\u0445 \u043F\u0440\u0438\u043D\u0442\u0435\u0440\u0456\u0432:");
+	private JTextField tF_poshukSN;
+	
+	boolean b_prynterObrano = false;
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Pryntery(final String s_NameProduct) {
@@ -101,26 +107,39 @@ public class Pryntery extends JFrame{
 		setResizable(false);
 		setLocationRelativeTo(null);
 		setVisible(true);
-		
+
 		// лого (в треї) на панелі задач
 		setIconImage(Toolkit.getDefaultToolkit().getImage(new File("res/ZakK.png").toString()));
 
-		{ // початкове відображення Місця 1 рівня
-			al_Mictce.add("");  // добавляємо пусте поле на початку
+		{ 
+			s_mas_Mistce = null;
+			al_Mistce.clear();
+			s_mas_Mistce1 = null;
+			al_Mistce1.clear();
+						
+			s_mas_Marka = null;
+			al_Marka.clear();
+			s_mas_Model = null;
+			al_Model.clear();
+			s_mas_SN = null;
+			al_SN.clear();
+			
+			// початкове відображення Місця 1 рівня
+			al_Mistce.add("");  // добавляємо пусте поле на початку
 			for (String path : Menu.fileInDirect(s_Path_Mictce)) {
-				al_Mictce.add(path); // отримуємо список всіх місць
+				al_Mistce.add(path); // отримуємо список всіх місць
 				// System.out.println(al_Mictce);
 			}
 
 			// переписуємо ArrayList із всіма місцями в стрінговий масив, щоб
 			// потім його записати в ЧекБокс
-			s_mas_Misctce = al_Mictce.toArray(new String[al_Mictce.size()]);
+			s_mas_Mistce = al_Mistce.toArray(new String[al_Mistce.size()]);
 			
 			// виводимо / перевіряємо масив
 			// System.out.println(Arrays.toString(s_mas_Misctce));
 		}
 
-		cB_Mistse = new JComboBox(s_mas_Misctce);
+		cB_Mistse = new JComboBox(s_mas_Mistce);
 		cB_Mistse.setBounds(27, 104, 227, 20);
 		getContentPane().setLayout(null);
 //		cB_Mistse2 = new JComboBox(s_mas_Misctce2);
@@ -172,7 +191,7 @@ public class Pryntery extends JFrame{
 				new PrynteryAdd(s_NameProduct);
 			}
 		});
-		b_Add.setBounds(293, 175, 227, 23);
+		b_Add.setBounds(283, 120, 227, 23);
 
 		getContentPane().add(b_Add);
 		l_Mistse2.setBounds(17, 135, 250, 14);
@@ -190,8 +209,8 @@ public class Pryntery extends JFrame{
 			public void actionPerformed(ActionEvent e) {
 
 				// обнуляємо масиви
-				s_mas_Misctce2 = null;
-				al_Mictce2.clear();
+				s_mas_Mistce1 = null;
+				al_Mistce1.clear();
 				s_mas_Marka = null;
 				al_Marka.clear();
 				s_mas_Model = null;
@@ -203,37 +222,38 @@ public class Pryntery extends JFrame{
 				tF_IN.setText("");
 				tF_Stan.setText("");
 				tA_Koment.setText("");
+				tF_MOL.setText("");
 
 				cB_Marka.setModel(new DefaultComboBoxModel());
 				cB_Model.setModel(new DefaultComboBoxModel());
 				cB_SN.setModel(new DefaultComboBoxModel());
 				
-				al_Mictce2.add("");
+				al_Mistce1.add("");
 				
 				for (String path : Menu.fileInDirect(s_Path_Mictce
 						+ (String) cB_Mistse.getSelectedItem())) {
-					al_Mictce2.add(path);
+					al_Mistce1.add(path);
 				}
 				
 				// переписуємо ArrayList із всіма містами в стрінговий масив,
 				// щоб потім його записати в ЧекБокс
-				s_mas_Misctce2 = al_Mictce2.toArray(new String[al_Mictce2
+				s_mas_Mistce1 = al_Mistce1.toArray(new String[al_Mistce1
 						.size()]);
 
 				// виводимо / перевіряємо масив
 				// System.out.println(Arrays.toString(s_mas_Misctce2));
 
 				// Полностью переопределяем все элементы
-				cB_Mistse2.setModel(new DefaultComboBoxModel(s_mas_Misctce2));
+				cB_Mistce1.setModel(new DefaultComboBoxModel(s_mas_Mistce1));
 
 				revalidate();
 			}
 		});
 
 		getContentPane().add(l_Mistse2);
-		cB_Mistse2.setBounds(27, 160, 227, 20);
-		getContentPane().add(cB_Mistse2);
-		cB_Mistse2.addActionListener(new ActionListener() {
+		cB_Mistce1.setBounds(27, 160, 227, 20);
+		getContentPane().add(cB_Mistce1);
+		cB_Mistce1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 
 				// обнуляємо масиви
@@ -248,7 +268,8 @@ public class Pryntery extends JFrame{
 				tF_IN.setText("");
 				tF_Stan.setText("");
 				tA_Koment.setText("");
-
+				tF_MOL.setText("");
+				
 				cB_Model.setModel(new DefaultComboBoxModel());
 				cB_SN.setModel(new DefaultComboBoxModel());
 				
@@ -256,7 +277,7 @@ public class Pryntery extends JFrame{
 				
 				for (String path : Menu.fileInDirect(s_Path_Mictce
 						+ (String) cB_Mistse.getSelectedItem()+
-						"/"	+ (String) cB_Mistse2.getSelectedItem())) {
+						"/"	+ (String) cB_Mistce1.getSelectedItem())) {
 					al_Marka.add(path);
 				}
 				
@@ -288,6 +309,7 @@ public class Pryntery extends JFrame{
 				tF_IN.setText("");
 				tF_Stan.setText("");
 				tA_Koment.setText("");
+				tF_MOL.setText("");
 
 				cB_SN.setModel(new DefaultComboBoxModel());
 				
@@ -295,7 +317,7 @@ public class Pryntery extends JFrame{
 				
 				for (String path : Menu.fileInDirect(s_Path_Mictce
 						+ (String) cB_Mistse.getSelectedItem()
-						+ "/" + (String) cB_Mistse2.getSelectedItem()
+						+ "/" + (String) cB_Mistce1.getSelectedItem()
 						+ "/" + (String) cB_Marka.getSelectedItem())) {
 					al_Model.add(path);
 				}
@@ -325,12 +347,13 @@ public class Pryntery extends JFrame{
 				tF_IN.setText("");
 				tF_Stan.setText("");
 				tA_Koment.setText("");
+				tF_MOL.setText("");
 				
 				al_SN.add("");
 				
 				for (String path : Menu.fileInDirect(s_Path_Mictce
 						+ (String) cB_Mistse.getSelectedItem()
-						+ "/" + (String) cB_Mistse2.getSelectedItem()
+						+ "/" + (String) cB_Mistce1.getSelectedItem()
 						+ "/" + (String) cB_Marka.getSelectedItem()
 						+ "/" + (String) cB_Model.getSelectedItem())) {
 					al_SN.add(path);
@@ -354,131 +377,10 @@ public class Pryntery extends JFrame{
 		getContentPane().add(cB_SN);		
 		cB_SN.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
-				s_Inv = "";
-				s_IP = "";
-				s_Stan = "";
-				s_Koment = "";
-				s_MOL = "";
-
-				tF_IP_USB.setText("");
-				tF_IN.setText("");
-				tF_Stan.setText("");
-				tA_Koment.setText("");
-				
-				// IP
-				try {
-					FileInputStream file_IP = new FileInputStream(new File(s_Path_Mictce
-							+ (String) cB_Mistse.getSelectedItem() + "/"
-							+ (String) cB_Mistse2.getSelectedItem() + "/"
-							+ (String) cB_Marka.getSelectedItem() + "/"
-							+ (String) cB_Model.getSelectedItem() + "/"
-							+ (String) cB_SN.getSelectedItem())+ "/IP");
-					byte [] byte_file_IP = new byte[file_IP.available()];
-					file_IP.read(byte_file_IP);
-					file_IP.close();
-					
-					String [] s_mas_IP = new String (byte_file_IP,"Cp1251").split("\n");
-					
-					for(String for_mas_IP: s_mas_IP){
-//						s_IP = s_IP + for_mas_IP + "\n";
-						s_IP = for_mas_IP;
-					}
-					
-					tF_IP_USB.setText(s_IP);
-					
-				} catch (Exception e1) {}
-				
-				// Комент
-				try {
-					FileInputStream file_Koment = new FileInputStream(new File(s_Path_Mictce
-							+ (String) cB_Mistse.getSelectedItem() + "/"
-							+ (String) cB_Mistse2.getSelectedItem() + "/"
-							+ (String) cB_Marka.getSelectedItem() + "/"
-							+ (String) cB_Model.getSelectedItem() + "/"
-							+ (String) cB_SN.getSelectedItem())+ "/Комент");
-					byte [] byte_file_Koment = new byte[file_Koment.available()];
-					file_Koment.read(byte_file_Koment);
-					file_Koment.close();
-					
-					String [] s_mas_Koment = new String (byte_file_Koment,"Cp1251").split("\n");
-					
-					for(String for_mas_Koment: s_mas_Koment){
-						s_Koment = s_Koment + for_mas_Koment + "\n";
-					}
-					
-					tA_Koment.setText(s_Koment);
-					
-				} catch (Exception e1) {}
-				
-				// Інв
-				try {
-					FileInputStream file_Inv = new FileInputStream(new File(s_Path_Mictce
-							+ (String) cB_Mistse.getSelectedItem() + "/"
-							+ (String) cB_Mistse2.getSelectedItem() + "/"
-							+ (String) cB_Marka.getSelectedItem() + "/"
-							+ (String) cB_Model.getSelectedItem() + "/"
-							+ (String) cB_SN.getSelectedItem())+ "/Інв");
-					byte [] byte_file_Inv = new byte[file_Inv.available()];
-					file_Inv.read(byte_file_Inv);
-					file_Inv.close();
-					
-					String [] s_mas_Inv = new String (byte_file_Inv,"Cp1251").split("\n");
-					
-					for(String for_mas_Inv: s_mas_Inv){
-//						s_Inv = s_Inv + for_mas_Inv + "\n";
-						s_Inv = for_mas_Inv;
-					}
-					
-					tF_IN.setText(s_Inv);
-					
-				} catch (Exception e1) {}
-				
-				// Стан
-				try {
-					FileInputStream file_Stan = new FileInputStream(new File(s_Path_Mictce
-							+ (String) cB_Mistse.getSelectedItem() + "/"
-							+ (String) cB_Mistse2.getSelectedItem() + "/"
-							+ (String) cB_Marka.getSelectedItem() + "/"
-							+ (String) cB_Model.getSelectedItem() + "/"
-							+ (String) cB_SN.getSelectedItem())+ "/Стан");
-					byte [] byte_file_Stan = new byte[file_Stan.available()];
-					file_Stan.read(byte_file_Stan);
-					file_Stan.close();
-					
-					String [] s_mas_Stan = new String (byte_file_Stan,"Cp1251").split("\n");
-					
-					for(String for_mas_Stan: s_mas_Stan){
-//						s_Stan = s_Stan + for_mas_Stan + "\n";
-						s_Stan = for_mas_Stan;
-					}
-					
-					tF_Stan.setText(s_Stan);
-					
-				} catch (Exception e1) {}
-				
-					// MOЛ
-					try {
-						FileInputStream file_MOL = new FileInputStream(new File(s_Path_Mictce
-								+ (String) cB_Mistse.getSelectedItem() + "/"
-								+ (String) cB_Mistse2.getSelectedItem() + "/"
-								+ (String) cB_Marka.getSelectedItem() + "/"
-								+ (String) cB_Model.getSelectedItem() + "/"
-								+ (String) cB_SN.getSelectedItem())+ "/МОЛ");
-						byte [] byte_file_MOL = new byte[file_MOL.available()];
-						file_MOL.read(byte_file_MOL);
-						file_MOL.close();
-						
-						String [] s_mas_MOL = new String (byte_file_MOL,"Cp1251").split("\n");
-						
-						for(String for_mas_MOL: s_mas_MOL){
-//							s_MOL = s_MOL + for_mas_MOL + "\n";
-							s_MOL = for_mas_MOL;
-						}
-						
-						tF_MOL.setText(s_MOL);
-					
-				} catch (Exception e1) {}
+				daniPoPrynteru((String) cB_Mistse.getSelectedItem(), (String) cB_Mistce1.getSelectedItem(),
+						(String) cB_Marka.getSelectedItem(), (String) cB_Model.getSelectedItem(),
+						(String) cB_SN.getSelectedItem());
+				b_prynterObrano = true ;
 			}
 		});
 		
@@ -533,7 +435,7 @@ public class Pryntery extends JFrame{
 					try {
 						String s_Path_IP = s_Path_Mictce
 								+ (String) cB_Mistse.getSelectedItem() + "/"
-								+ (String) cB_Mistse2.getSelectedItem() + "/"
+								+ (String) cB_Mistce1.getSelectedItem() + "/"
 								+ (String) cB_Marka.getSelectedItem() + "/"
 								+ (String) cB_Model.getSelectedItem() + "/"
 								+ (String) cB_SN.getSelectedItem() + "/IP";
@@ -549,10 +451,10 @@ public class Pryntery extends JFrame{
 					try {
 						String s_Path_Inv = s_Path_Mictce
 								+ (String) cB_Mistse.getSelectedItem() + "/"
-								+ (String) cB_Mistse2.getSelectedItem() + "/"
+								+ (String) cB_Mistce1.getSelectedItem() + "/"
 								+ (String) cB_Marka.getSelectedItem() + "/"
 								+ (String) cB_Model.getSelectedItem() + "/"
-								+ (String) cB_SN.getSelectedItem() + "/Інв";
+								+ (String) cB_SN.getSelectedItem() + "/IN";
 						formatter_Inv = new Formatter(s_Path_Inv);
 					} catch (Exception e) {
 						JOptionPane.showMessageDialog(null,
@@ -565,11 +467,16 @@ public class Pryntery extends JFrame{
 					try {
 						String s_Path_Stan = s_Path_Mictce
 								+ (String) cB_Mistse.getSelectedItem() + "/"
-								+ (String) cB_Mistse2.getSelectedItem() + "/"
+								+ (String) cB_Mistce1.getSelectedItem() + "/"
 								+ (String) cB_Marka.getSelectedItem() + "/"
 								+ (String) cB_Model.getSelectedItem() + "/"
-								+ (String) cB_SN.getSelectedItem() + "/Стан";
+								+ (String) cB_SN.getSelectedItem() + "/Stan";
 						formatter_Stan = new Formatter(s_Path_Stan);
+						if(s_Path_Stan.equals("Працюючий")){
+							kilkistPraciyiychuhPrynteriv(true);
+						}else{
+							kilkistPraciyiychuhPrynteriv(false);
+						}
 					} catch (Exception e) {
 						JOptionPane.showMessageDialog(null,
 								"Не вдалось зберегти Стан");
@@ -581,10 +488,10 @@ public class Pryntery extends JFrame{
 					try {
 						String s_Path_Koment = s_Path_Mictce
 								+ (String) cB_Mistse.getSelectedItem() + "/"
-								+ (String) cB_Mistse2.getSelectedItem() + "/"
+								+ (String) cB_Mistce1.getSelectedItem() + "/"
 								+ (String) cB_Marka.getSelectedItem() + "/"
 								+ (String) cB_Model.getSelectedItem() + "/"
-								+ (String) cB_SN.getSelectedItem() + "/Комент";
+								+ (String) cB_SN.getSelectedItem() + "/Coment";
 						formatter_Koment = new Formatter(s_Path_Koment);
 					} catch (Exception e) {
 						JOptionPane.showMessageDialog(null,
@@ -597,10 +504,10 @@ public class Pryntery extends JFrame{
 					try {
 						String s_Path_MOL = s_Path_Mictce
 								+ (String) cB_Mistse.getSelectedItem() + "/"
-								+ (String) cB_Mistse2.getSelectedItem() + "/"
+								+ (String) cB_Mistce1.getSelectedItem() + "/"
 								+ (String) cB_Marka.getSelectedItem() + "/"
 								+ (String) cB_Model.getSelectedItem() + "/"
-								+ (String) cB_SN.getSelectedItem() + "/МОЛ";
+								+ (String) cB_SN.getSelectedItem() + "/MOL";
 						formatter_MOL = new Formatter(s_Path_MOL);
 					} catch (Exception e) {
 						JOptionPane.showMessageDialog(null,
@@ -624,9 +531,9 @@ public class Pryntery extends JFrame{
 		tF_Stan.setHorizontalAlignment(SwingConstants.CENTER);
 		tF_Stan.setFont(new Font("Sitka Text", Font.PLAIN, 15));
 		tF_Stan.setColumns(10);
-		tF_Stan.setBounds(293, 404, 227, 20);
-		
+		tF_Stan.setBounds(293, 404, 227, 20);		
 		getContentPane().add(tF_Stan);
+		
         b_Delete.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
         		new PrynteryDelete(s_NameProduct);
@@ -646,10 +553,21 @@ public class Pryntery extends JFrame{
 //        getContentPane().add(p_Ramka);
         
        
-        b_Delete.setBounds(293, 203, 227, 23);
+        b_Delete.setBounds(283, 148, 227, 23);
         
         getContentPane().add(b_Delete);
-        b_Peremistyty.setBounds(293, 231, 227, 23);
+        b_Peremistyty.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent arg0) {
+        		if(b_prynterObrano == true){
+        			new PrynteryPeremistyty(s_NameProduct, (String) cB_Mistse.getSelectedItem(),
+        					(String) cB_Mistce1.getSelectedItem(), (String) cB_Marka.getSelectedItem(),
+        					(String) cB_Model.getSelectedItem(), (String) cB_SN.getSelectedItem());        			
+        		}else{
+        			JOptionPane.showMessageDialog(null, "Оберіть принтер");
+        		}
+        	}
+        });
+        b_Peremistyty.setBounds(283, 201, 227, 23);
         
         getContentPane().add(b_Peremistyty);
         l_MOL.setHorizontalAlignment(SwingConstants.CENTER);
@@ -663,6 +581,73 @@ public class Pryntery extends JFrame{
         tF_MOL.setBounds(295, 460, 227, 20);
         
         getContentPane().add(tF_MOL);
+                
+        JLabel l_textKilkistVsihPrynteriv = new JLabel("\u041A\u0456\u043B\u044C\u043A\u0456\u0441\u0442\u044C \u0432\u0441\u0456\u0445 \u043F\u0440\u0438\u043D\u0442\u0435\u0440\u0456\u0432:");
+        l_textKilkistVsihPrynteriv.setHorizontalAlignment(SwingConstants.CENTER);
+        l_textKilkistVsihPrynteriv.setFont(new Font("Sitka Text", Font.PLAIN, 15));
+        l_textKilkistVsihPrynteriv.setBounds(527, 79, 250, 14);
+        getContentPane().add(l_textKilkistVsihPrynteriv);
+        
+        JLabel l_KilkistVsihPrynteriv = new JLabel(kilkistPrynteriv(new File(s_Path_Mictce)));
+        l_KilkistVsihPrynteriv.setHorizontalAlignment(SwingConstants.CENTER);
+        l_KilkistVsihPrynteriv.setFont(new Font("Sitka Text", Font.PLAIN, 15));
+        l_KilkistVsihPrynteriv.setBounds(787, 79, 98, 14);
+        getContentPane().add(l_KilkistVsihPrynteriv);
+        
+        l_textKilkistPraciyiychuhPrynteriv.setHorizontalAlignment(SwingConstants.CENTER);
+        l_textKilkistPraciyiychuhPrynteriv.setFont(new Font("Sitka Text", Font.PLAIN, 15));
+        l_textKilkistPraciyiychuhPrynteriv.setBounds(527, 104, 250, 14);        
+        getContentPane().add(l_textKilkistPraciyiychuhPrynteriv);
+        
+        JLabel l_KilkistPraciyiychuhPrynteriv = new JLabel(kilkistPraciyiychuhPrynteriv());
+        l_KilkistPraciyiychuhPrynteriv.setHorizontalAlignment(SwingConstants.CENTER);
+        l_KilkistPraciyiychuhPrynteriv.setFont(new Font("Sitka Text", Font.PLAIN, 15));
+        l_KilkistPraciyiychuhPrynteriv.setBounds(787, 104, 98, 14);
+        
+        getContentPane().add(l_KilkistPraciyiychuhPrynteriv);
+        
+        tF_poshukSN = new JTextField();
+        tF_poshukSN.addMouseListener(new MouseAdapter() {
+        	@Override
+        	public void mouseClicked(MouseEvent arg0) {
+        		tF_poshukSN.setText(null);
+        		tF_poshukSN.setFont(new Font("Sitka Text", Font.PLAIN, 15));
+        		tF_poshukSN.setForeground(Color.DARK_GRAY);
+        	}
+        });
+        tF_poshukSN.setForeground(Color.GRAY);
+        tF_poshukSN.setText("\u0412\u0432\u0435\u0434\u0456\u0442\u044C \u0441\u0435\u0440\u0456\u0439\u043D\u0438\u0439 \u043D\u043E\u043C\u0435\u0440...");
+        tF_poshukSN.setToolTipText("");
+        tF_poshukSN.setHorizontalAlignment(SwingConstants.CENTER);
+        tF_poshukSN.setFont(new Font("Sitka Text", Font.ITALIC, 12));
+        tF_poshukSN.setColumns(10);
+        tF_poshukSN.setBounds(541, 272, 227, 20);
+        getContentPane().add(tF_poshukSN);
+        
+		JButton b_poshukSN = new JButton(
+				"\u0412\u0438\u043A\u043E\u043D\u0430\u0442\u0438 \u043F\u043E\u0448\u0443\u043A");
+		b_poshukSN.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+
+				if (tF_poshukSN.getText().equals("Введіть серійний номер...")) {
+					tF_poshukSN.setText(null);
+				}
+
+				if (tF_poshukSN.getText().equals(null)
+						|| tF_poshukSN.getText().equals("")
+						|| tF_poshukSN.getText().equals(" ")
+						|| tF_poshukSN.getText().equals("  ")
+						|| tF_poshukSN.getText().equals("   ")) {
+					JOptionPane.showMessageDialog(null,
+							"Ви не ввели серійний номер");
+				} else {
+					poshukPruntera(tF_poshukSN.getText());
+				}
+
+			}
+		});
+        b_poshukSN.setBounds(783, 271, 136, 23);
+        getContentPane().add(b_poshukSN);
 		
 		// l_fon = new JLabel("");
 		// l_fon.setFont(new Font("Sitka Text", Font.PLAIN, 15));
@@ -672,4 +657,300 @@ public class Pryntery extends JFrame{
 
         setVisible(true);
 	}
+
+	@SuppressWarnings("unused")
+	private String kilkistPrynteriv(File file) {
+		int i_kilkistPrynteriv = 0;
+		String s_kilkistPrynteriv = "";
+		for (File for_Mistce : file.listFiles()) {
+			for (File for_Mistce1 : for_Mistce.listFiles()) {
+				for (File for_Model : for_Mistce1.listFiles()) {
+					for (File for_Marka : for_Model.listFiles()) {
+						for (File for_SN : for_Marka.listFiles()) {
+							i_kilkistPrynteriv++;
+						}
+					}
+				}
+			}
+		}
+		s_kilkistPrynteriv = s_kilkistPrynteriv + i_kilkistPrynteriv;
+		return s_kilkistPrynteriv;
+	}
+	
+	private void kilkistPraciyiychuhPrynteriv(boolean b_stan) {
+		
+		String s_k = null;
+		int i_k;
+		
+		try {
+			FileInputStream file_k = new FileInputStream(new File("C:/ZakK_Printer/Statistic/kilkistPraciyiychuhPrynteriv"));
+			byte [] byte_file_k = new byte[file_k.available()];
+			file_k.read(byte_file_k);
+			file_k.close();
+			
+			String [] s_mas_k = new String (byte_file_k,"Cp1251").split("\n");
+			
+			for(String for_mas_k: s_mas_k){
+//				s_IP = s_IP + for_mas_IP + "\n";
+				s_k = for_mas_k;
+			}
+			
+			i_k = Integer.parseInt(s_k);
+			
+			if(b_stan == true){
+				i_k++;
+			}else{
+				i_k--;
+			}
+			
+			s_k = "" + i_k;
+			
+			try {
+				String s_PathSave = "C:/ZakK_Printer/Statistic/kilkistPraciyiychuhPrynteriv";
+				formatter_kilkistPraciyiychuhPrynteriv = new Formatter(s_PathSave);
+				formatter_kilkistPraciyiychuhPrynteriv.format(s_k);
+				formatter_kilkistPraciyiychuhPrynteriv.close();
+			} catch (Exception e) {
+				JOptionPane.showMessageDialog(null, "");
+			}
+			
+		} catch (Exception e1) {}	
+	}
+
+	private String kilkistPraciyiychuhPrynteriv() {
+		
+		String s_k = null;
+		
+		try {
+			FileInputStream file_k = new FileInputStream(new File("C:/ZakK_Printer/Statistic/kilkistPraciyiychuhPrynteriv"));
+			byte [] byte_file_k = new byte[file_k.available()];
+			file_k.read(byte_file_k);
+			file_k.close();
+			
+			String [] s_mas_k = new String (byte_file_k,"Cp1251").split("\n");
+			
+			for(String for_mas_k: s_mas_k){
+//				s_IP = s_IP + for_mas_IP + "\n";
+				s_k = for_mas_k;
+			}
+
+		} catch (Exception e1) {}
+		return s_k;
+	}
+	
+	void daniPoPrynteru (String s_Mistce, String s_Mistce1, String s_Marka, String s_Model, String s_SN){
+				
+		s_Inv = "";
+		s_IP = "";
+		s_Stan = "";
+		s_Koment = "";
+		s_MOL = "";
+
+		tF_IP_USB.setText("");
+		tF_IN.setText("");
+		tF_Stan.setText("");
+		tA_Koment.setText("");
+		tF_MOL.setText("");
+		
+		// IP
+		try {
+			FileInputStream file_IP = new FileInputStream(new File(s_Path_Mictce
+					+ s_Mistce + "/"
+					+ s_Mistce1 + "/"
+					+ s_Marka + "/"
+					+ s_Model + "/"
+					+ s_SN)+ "/IP");
+			byte [] byte_file_IP = new byte[file_IP.available()];
+			file_IP.read(byte_file_IP);
+			file_IP.close();
+			
+			String [] s_mas_IP = new String (byte_file_IP,"Cp1251").split("\n");
+			
+			for(String for_mas_IP: s_mas_IP){
+//				s_IP = s_IP + for_mas_IP + "\n";
+				s_IP = for_mas_IP;
+			}
+			
+			tF_IP_USB.setText(s_IP);
+			
+		} catch (Exception e1) {}
+		
+		// Комент
+		try {
+			FileInputStream file_Koment = new FileInputStream(new File(s_Path_Mictce
+					+ s_Mistce + "/"
+					+ s_Mistce1 + "/"
+					+ s_Marka + "/"
+					+ s_Model + "/"
+					+ s_SN)+ "/Coment");
+			byte [] byte_file_Koment = new byte[file_Koment.available()];
+			file_Koment.read(byte_file_Koment);
+			file_Koment.close();
+			
+			String [] s_mas_Koment = new String (byte_file_Koment,"Cp1251").split("\n");
+			
+			for(String for_mas_Koment: s_mas_Koment){
+				s_Koment = s_Koment + for_mas_Koment + "\n";
+			}
+			
+			tA_Koment.setText(s_Koment);
+			
+		} catch (Exception e1) {}
+		
+		// Інв
+		try {
+			FileInputStream file_Inv = new FileInputStream(new File(s_Path_Mictce
+					+ s_Mistce + "/"
+					+ s_Mistce1 + "/"
+					+ s_Marka + "/"
+					+ s_Model + "/"
+					+ s_SN)+ "/IN");
+			byte [] byte_file_Inv = new byte[file_Inv.available()];
+			file_Inv.read(byte_file_Inv);
+			file_Inv.close();
+			
+			String [] s_mas_Inv = new String (byte_file_Inv,"Cp1251").split("\n");
+			
+			for(String for_mas_Inv: s_mas_Inv){
+//				s_Inv = s_Inv + for_mas_Inv + "\n";
+				s_Inv = for_mas_Inv;
+			}
+			
+			tF_IN.setText(s_Inv);
+			
+		} catch (Exception e1) {}
+		
+		// Стан
+		try {
+			FileInputStream file_Stan = new FileInputStream(new File(s_Path_Mictce
+					+ s_Mistce + "/"
+					+ s_Mistce1 + "/"
+					+ s_Marka + "/"
+					+ s_Model + "/"
+					+ s_SN)+ "/Stan");
+			byte [] byte_file_Stan = new byte[file_Stan.available()];
+			file_Stan.read(byte_file_Stan);
+			file_Stan.close();
+			
+			String [] s_mas_Stan = new String (byte_file_Stan,"Cp1251").split("\n");
+			
+			for(String for_mas_Stan: s_mas_Stan){
+//				s_Stan = s_Stan + for_mas_Stan + "\n";
+				s_Stan = for_mas_Stan;
+			}
+			
+			tF_Stan.setText(s_Stan);
+			
+		} catch (Exception e1) {}
+		
+			// MOЛ
+			try {
+				FileInputStream file_MOL = new FileInputStream(new File(s_Path_Mictce
+						+ s_Mistce + "/"
+						+ s_Mistce1 + "/"
+						+ s_Marka + "/"
+						+ s_Model + "/"
+						+ s_SN)+ "/MOL");
+				byte [] byte_file_MOL = new byte[file_MOL.available()];
+				file_MOL.read(byte_file_MOL);
+				file_MOL.close();
+				
+				String [] s_mas_MOL = new String (byte_file_MOL,"Cp1251").split("\n");
+				
+				for(String for_mas_MOL: s_mas_MOL){
+//					s_MOL = s_MOL + for_mas_MOL + "\n";
+					s_MOL = for_mas_MOL;
+				}
+				
+				tF_MOL.setText(s_MOL);
+			
+		} catch (Exception e1) {}
+	}
+	
+	void poshukPruntera (String s_SN_new){
+		
+		for (File for_Mistce : new File(s_Path_Mictce).listFiles()) {      
+			for (File for_Mistce1 : for_Mistce.listFiles()) {
+				for (File for_Marka : for_Mistce1.listFiles()) {
+					for (File for_Model : for_Marka.listFiles()) {
+						for (File for_SN : for_Model.listFiles()) {									
+								String s_for_Mistce = for_Mistce + "";
+								String s_for_Mistce1 = for_Mistce1 + "";
+								String s_for_Marka = for_Marka + "";
+								String s_for_Model = for_Model + "";
+								
+								int i_for_Mistce = s_for_Mistce.length();
+								int i_for_Mistce1 = s_for_Mistce1.length();
+								int i_for_Marka = s_for_Marka.length();
+								int i_for_Model = s_for_Model.length();
+								
+								String s_for_SN = "" + for_SN;
+
+								String s_Mistce = s_for_SN.substring(21, i_for_Mistce);
+								String s_Mistce1 = s_for_SN.substring(i_for_Mistce + 1, i_for_Mistce1);
+								String s_Marka = s_for_SN.substring(i_for_Mistce1 + 1, i_for_Marka);
+								String s_Model = s_for_SN.substring(i_for_Marka + 1, i_for_Model);										
+								String s_SN = s_for_SN.substring(i_for_Model + 1, s_for_SN.length());
+								
+								al_Mistce.clear();
+								al_Mistce1.clear();
+								al_Marka.clear();
+								al_Model.clear();
+								al_SN.clear();
+								
+								al_Mistce.add(0, s_Mistce);  // добавляємо в початок списку
+								s_mas_Mistce = al_Mistce.toArray(new String[al_Mistce
+										.size()]);
+								
+								al_Mistce1.add(0,s_Mistce1);   // добавляємо в початок списку
+								s_mas_Mistce1 = al_Mistce1.toArray(new String[al_Mistce1
+										.size()]);
+
+
+								al_Marka.add(0,s_Marka);   // добавляємо в початок списку
+								s_mas_Marka = al_Marka.toArray(new String[al_Marka
+										.size()]);
+								
+								al_Model.add(0,s_Model);   // добавляємо в початок списку
+								s_mas_Model = al_Model.toArray(new String[al_Model
+										.size()]);										
+
+								al_SN.add(0,s_SN);   // добавляємо в початок списку
+								s_mas_SN = al_SN.toArray(new String[al_SN
+										.size()]);
+
+								
+								 if(s_SN_new.equals(s_SN)){
+//										 cB_Mistse.setModel(new DefaultComboBoxModel(s_mas_Mistce));
+//										 cB_Mistce1.setModel(new DefaultComboBoxModel(s_mas_Mistce1));
+//										 cB_Marka.setModel(new DefaultComboBoxModel(s_mas_Marka));
+//										 cB_Model.setModel(new DefaultComboBoxModel(s_mas_Model));
+//										 cB_SN.setModel(new DefaultComboBoxModel(s_mas_SN));
+										 
+										 daniPoPrynteru(s_Mistce, s_Mistce1, s_Marka, s_Model, s_SN);
+								 }
+							}
+						}
+					}
+				}
+			}		
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static void pisliaPeremishchenia(String s_Mistce,
+
+			String s_Mistce1) {
+		
+		al_Mistce.clear();
+		al_Mistce.add(s_Mistce);
+		s_mas_Mistce = al_Mistce.toArray(new String[al_Mistce.size()]);
+		
+		al_Mistce1.clear();
+		al_Mistce1.add(s_Mistce1);
+		s_mas_Mistce1 = al_Mistce1.toArray(new String[al_Mistce1.size()]);
+				
+		cB_Mistse.setModel(new DefaultComboBoxModel(s_mas_Mistce));
+		cB_Mistce1.setModel(new DefaultComboBoxModel(s_mas_Mistce1));
+	}
+	
 }

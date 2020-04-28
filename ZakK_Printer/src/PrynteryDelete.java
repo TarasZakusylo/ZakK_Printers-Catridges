@@ -5,6 +5,7 @@ import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.Shape;
 import java.awt.TextArea;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -101,6 +102,10 @@ public class PrynteryDelete extends JFrame{
 		setLocationRelativeTo(null);
 		setVisible(true);
 		
+		// лого (в треї) на панелі задач
+		setIconImage(Toolkit.getDefaultToolkit().getImage(
+				new File("res/ZakK.png").toString()));
+		
 		{ // початкове відображення Місця 1 рівня
 			al_Mictce.add("");  // добавляємо пусте поле на початку
 			for (String path : Menu.fileInDirect(s_Path_Mictce)) {
@@ -190,7 +195,8 @@ public class PrynteryDelete extends JFrame{
 				tF_IN.setText("");
 				tF_Stan.setText("");
 				tA_Koment.setText("");
-
+				tF_MOL.setText("");
+				
 				cB_Marka.setModel(new DefaultComboBoxModel());
 				cB_Model.setModel(new DefaultComboBoxModel());
 				cB_SN.setModel(new DefaultComboBoxModel());
@@ -237,7 +243,8 @@ public class PrynteryDelete extends JFrame{
 				tF_IN.setText("");
 				tF_Stan.setText("");
 				tA_Koment.setText("");
-
+				tF_MOL.setText("");
+				
 				cB_Model.setModel(new DefaultComboBoxModel());
 				cB_SN.setModel(new DefaultComboBoxModel());
 				
@@ -279,7 +286,8 @@ public class PrynteryDelete extends JFrame{
 				tF_IN.setText("");
 				tF_Stan.setText("");
 				tA_Koment.setText("");
-
+				tF_MOL.setText("");
+				
 				cB_SN.setModel(new DefaultComboBoxModel());
 				
 				al_Model.add("");
@@ -318,6 +326,7 @@ public class PrynteryDelete extends JFrame{
 				tF_IN.setText("");
 				tF_Stan.setText("");
 				tA_Koment.setText("");
+				tF_MOL.setText("");
 				
 				al_SN.add("");
 				
@@ -349,17 +358,19 @@ public class PrynteryDelete extends JFrame{
 		getContentPane().add(cB_SN);		
 		cB_SN.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
-				s_Inv = "";
-				s_IP = "";
-				s_Stan = "";
-				s_Koment = "";
-
+			
 				tF_IP_USB.setText("");
 				tF_IN.setText("");
 				tF_Stan.setText("");
 				tA_Koment.setText("");
-
+				tF_MOL.setText("");
+				
+				s_Inv = "";
+				s_IP = "";
+				s_Stan = "";
+				s_Koment = "";
+				s_MOL = "";
+				
 				// IP
 				try {
 					FileInputStream file_IP = new FileInputStream(new File(
@@ -398,7 +409,7 @@ public class PrynteryDelete extends JFrame{
 									+ "/" + (String) cB_Marka.getSelectedItem()
 									+ "/" + (String) cB_Model.getSelectedItem()
 									+ "/" + (String) cB_SN.getSelectedItem())
-							+ "/Комент");
+							+ "/Coment");
 					byte[] byte_file_Koment = new byte[file_Koment.available()];
 					file_Koment.read(byte_file_Koment);
 					file_Koment.close();
@@ -425,7 +436,7 @@ public class PrynteryDelete extends JFrame{
 									+ "/" + (String) cB_Marka.getSelectedItem()
 									+ "/" + (String) cB_Model.getSelectedItem()
 									+ "/" + (String) cB_SN.getSelectedItem())
-							+ "/Інв");
+							+ "/IN");
 					byte[] byte_file_Inv = new byte[file_Inv.available()];
 					file_Inv.read(byte_file_Inv);
 					file_Inv.close();
@@ -453,7 +464,7 @@ public class PrynteryDelete extends JFrame{
 									+ "/" + (String) cB_Marka.getSelectedItem()
 									+ "/" + (String) cB_Model.getSelectedItem()
 									+ "/" + (String) cB_SN.getSelectedItem())
-							+ "/Стан");
+							+ "/Stan");
 					byte[] byte_file_Stan = new byte[file_Stan.available()];
 					file_Stan.read(byte_file_Stan);
 					file_Stan.close();
@@ -480,7 +491,7 @@ public class PrynteryDelete extends JFrame{
 									+ "/" + (String) cB_Marka.getSelectedItem()
 									+ "/" + (String) cB_Model.getSelectedItem()
 									+ "/" + (String) cB_SN.getSelectedItem())
-							+ "/МОЛ");
+							+ "/MOL");
 					byte[] byte_file_MOL = new byte[file_MOL.available()];
 					file_MOL.read(byte_file_MOL);
 					file_MOL.close();
@@ -536,11 +547,12 @@ public class PrynteryDelete extends JFrame{
 		tA_Koment.setFont(new Font("Sitka Text", Font.PLAIN, 15));
 		tA_Koment.setBounds(277, 381, 227, 177);
 		getContentPane().add(tA_Koment);
+		
 		l_Stan.setHorizontalAlignment(SwingConstants.CENTER);
 		l_Stan.setFont(new Font("Sitka Text", Font.PLAIN, 15));
-		l_Stan.setBounds(17, 465, 250, 14);
-		
+		l_Stan.setBounds(17, 465, 250, 14);		
 		getContentPane().add(l_Stan);
+		
 		tF_Stan.setHorizontalAlignment(SwingConstants.CENTER);
 		tF_Stan.setFont(new Font("Sitka Text", Font.PLAIN, 15));
 		tF_Stan.setColumns(10);
@@ -717,7 +729,6 @@ public class PrynteryDelete extends JFrame{
 	}
 	
 	void deleteKatalog(String Puth) {
-
 		// Підтвердження на основі додаткового вікна JOptionPane.showOptionDialog
 		Object[] options_Save = { "Так", "Ні" };
 		
@@ -729,29 +740,15 @@ public class PrynteryDelete extends JFrame{
 		setAlwaysOnTop(true);
 		
 		if (i_Save == JOptionPane.YES_OPTION) {
-
-			Path directory = Paths.get(Puth);
-
-			try { // рекурсія для видалення каталогу разом із його вмістом
-				Files.walkFileTree(directory, new SimpleFileVisitor<Path>() {
-
-					@SuppressWarnings("unused")
-					public FileVisitResult visitFile(Path file)
-							throws IOException {
-						Files.delete(file);
-						return FileVisitResult.CONTINUE;
-					}
-
-					@Override
-					public FileVisitResult postVisitDirectory(Path dir,
-							IOException exc) throws IOException {
-						Files.delete(dir);
-						return FileVisitResult.CONTINUE;
-					}
-				});
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			recursiveDelete(new File(Puth));
+			new File(Puth).delete();
+			
+			tF_IP_USB.setText("");
+			tF_IN.setText("");
+			tF_Stan.setText("");
+			tA_Koment.setText("");
+			tF_MOL.setText("");
+			
 			komentar("Видалено місце");
 		}
 	}
@@ -762,4 +759,26 @@ public class PrynteryDelete extends JFrame{
 		JOptionPane.showMessageDialog(null, text);
 		setAlwaysOnTop(true);
 	}
+	
+	// метод-рекурсія для видалення папки із файлами
+	public static void recursiveDelete(File file) {
+		// до конца рекурсивного цикла
+//		System.out.println("file " + file);
+		if (!file.exists())
+			return;
+
+		// если это папка, то идем внутрь этой папки и вызываем рекурсивное
+		// удаление всего, что там есть
+		if (file.isDirectory()) {
+			for (File f : file.listFiles()) {
+				// рекурсивный вызов
+				recursiveDelete(f);
+			}
+		}
+		// вызываем метод delete() для удаления файлов и пустых(!) папок
+		file.delete();
+//		System.out.println("Удаленный файл или папка: " +
+//		file.getAbsolutePath());
+	}
+	
 }
