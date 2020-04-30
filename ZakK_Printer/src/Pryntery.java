@@ -1,5 +1,9 @@
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.Shape;
 import java.awt.TextArea;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -17,6 +21,7 @@ import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 
@@ -52,7 +57,7 @@ public class Pryntery extends JFrame{
 	String s_Stan = "";
 	String s_MOL = "";
 	
-	static String s_Path_Mictce = "C:/ZakK_Printer/baza/";
+	static String s_Path_Printers = Settings.puthBazy() + "/Printers/";
 	
 	@SuppressWarnings("rawtypes")
 	JComboBox cB_Marka = new JComboBox();
@@ -98,6 +103,36 @@ public class Pryntery extends JFrame{
 	
 	boolean b_prynterObrano = false;
 	
+	@SuppressWarnings("serial")
+	private final JPanel p_RamkaSN = new JPanel() {
+		public void paintComponent(Graphics g) {
+			Graphics2D g2 = (Graphics2D) g;
+			Shape rect = new Rectangle(0, 0, 249, 106);
+			g2.draw(rect);
+		}
+	};
+	
+	@SuppressWarnings("serial")
+	// малюємо прямокутник
+	JPanel p_RamkaMistce1 = new JPanel() {
+		@Override
+		public void paintComponent(Graphics g) {
+			Graphics2D g2 = (Graphics2D) g;
+			Shape rect = new Rectangle(0, 0, 962, 189);
+			g2.draw(rect);
+		}
+	};
+	
+	private final JLabel l_PoshukSN = new JLabel("\u0412\u0432\u0435\u0434\u0456\u0442\u044C \u0441\u0435\u0440\u0456\u0439\u043D\u0438\u0439 \u043D\u043E\u043C\u0435\u0440");
+	
+	private JLabel l_IN;
+	private JLabel l_IP_USB;
+	private JButton b_Save;
+	private JLabel l_textKilkistVsihPrynteriv;
+	private JLabel l_KilkistVsihPrynteriv;
+	private final JButton b_Kartryji = new JButton("\u0417\u0430\u0431\u0440\u043E\u043D\u044E\u0432\u0430\u0442\u0438 \u043A\u0430\u0440\u0442\u0440\u0438\u0434\u0436");
+	private final JButton b_Remonty = new JButton("\u041F\u0435\u0440\u0435\u0439\u0442\u0438 \u0434\u043E \u0440\u0435\u043C\u043E\u043D\u0442\u0456\u0432");
+	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Pryntery(final String s_NameProduct) {
 		super(s_NameProduct);
@@ -126,7 +161,7 @@ public class Pryntery extends JFrame{
 			
 			// початкове відображення Місця 1 рівня
 			al_Mistce.add("");  // добавляємо пусте поле на початку
-			for (String path : Menu.fileInDirect(s_Path_Mictce)) {
+			for (String path : Menu.fileInDirect(s_Path_Printers)) {
 				al_Mistce.add(path); // отримуємо список всіх місць
 				// System.out.println(al_Mictce);
 			}
@@ -140,24 +175,17 @@ public class Pryntery extends JFrame{
 		}
 
 		cB_Mistse = new JComboBox(s_mas_Mistce);
+		cB_Mistse.setFont(new Font("Trebuchet MS", Font.BOLD, 12));
 		cB_Mistse.setBounds(27, 104, 227, 20);
 		getContentPane().setLayout(null);
-//		cB_Mistse2 = new JComboBox(s_mas_Misctce2);
-//		cB_Marka = new JComboBox(s_mas_Marka);
-//		cB_Model = new JComboBox(s_mas_Model);
-
-		label_Shapka = new JLabel(
-				"\u041E\u0431\u043B\u0456\u043A \u043F\u0440\u0438\u043D\u0442\u0435\u0440\u0456\u0432 \u0442\u0430 \u043A\u0430\u0440\u0442\u0440\u0438\u0434\u0436\u0456\u0432");
-		label_Shapka.setBounds(17, 11, 967, 29);
-		label_Shapka.setBackground(new Color(165, 42, 42));
-		label_Shapka.setHorizontalAlignment(SwingConstants.CENTER);
-		label_Shapka.setFont(new Font("Times New Roman", Font.ITALIC, 30));
-		getContentPane().add(label_Shapka);
 
 		b_Menu = new JButton("\u041C\u0435\u043D\u044E");
-		b_Menu.setBounds(875, 541, 109, 19);
+		b_Menu.setBounds(875, 11, 109, 23);
 		b_Menu.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+
+				cB_Mistce1.setModel(new DefaultComboBoxModel());
+
 				new Menu(s_NameProduct);
 				setVisible(false);
 			}
@@ -166,6 +194,14 @@ public class Pryntery extends JFrame{
 
 		b_Menu.setFont(new Font("Sitka Text", Font.PLAIN, 15));
 		getContentPane().add(b_Menu);
+
+		label_Shapka = new JLabel(
+				"\u041E\u0431\u043B\u0456\u043A \u043F\u0440\u0438\u043D\u0442\u0435\u0440\u0456\u0432");
+		label_Shapka.setBounds(17, 11, 967, 29);
+		label_Shapka.setBackground(new Color(165, 42, 42));
+		label_Shapka.setHorizontalAlignment(SwingConstants.CENTER);
+		label_Shapka.setFont(new Font("Times New Roman", Font.ITALIC, 30));
+		getContentPane().add(label_Shapka);
 
 		JLabel l_Marka = new JLabel(
 				"\u041E\u0431\u0435\u0440\u0456\u0442\u044C \u043C\u0430\u0440\u043A\u0443 \u043F\u0440\u0438\u043D\u0442\u0435\u0440\u0430");
@@ -185,13 +221,14 @@ public class Pryntery extends JFrame{
 		l_SN.setHorizontalAlignment(SwingConstants.CENTER);
 		l_SN.setFont(new Font("Sitka Text", Font.PLAIN, 15));
 		getContentPane().add(l_SN);
+		b_Add.setFont(new Font("Sitka Text", Font.PLAIN, 15));
 		
 		b_Add.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				new PrynteryAdd(s_NameProduct);
 			}
 		});
-		b_Add.setBounds(283, 120, 227, 23);
+		b_Add.setBounds(293, 216, 227, 23);
 
 		getContentPane().add(b_Add);
 		l_Mistse2.setBounds(17, 135, 250, 14);
@@ -230,7 +267,7 @@ public class Pryntery extends JFrame{
 				
 				al_Mistce1.add("");
 				
-				for (String path : Menu.fileInDirect(s_Path_Mictce
+				for (String path : Menu.fileInDirect(s_Path_Printers
 						+ (String) cB_Mistse.getSelectedItem())) {
 					al_Mistce1.add(path);
 				}
@@ -251,6 +288,7 @@ public class Pryntery extends JFrame{
 		});
 
 		getContentPane().add(l_Mistse2);
+		cB_Mistce1.setFont(new Font("Trebuchet MS", Font.BOLD, 12));
 		cB_Mistce1.setBounds(27, 160, 227, 20);
 		getContentPane().add(cB_Mistce1);
 		cB_Mistce1.addActionListener(new ActionListener() {
@@ -275,7 +313,7 @@ public class Pryntery extends JFrame{
 				
 				al_Marka.add("");
 				
-				for (String path : Menu.fileInDirect(s_Path_Mictce
+				for (String path : Menu.fileInDirect(s_Path_Printers
 						+ (String) cB_Mistse.getSelectedItem()+
 						"/"	+ (String) cB_Mistce1.getSelectedItem())) {
 					al_Marka.add(path);
@@ -294,6 +332,7 @@ public class Pryntery extends JFrame{
 				revalidate();
 			}
 		});
+		cB_Marka.setFont(new Font("Trebuchet MS", Font.BOLD, 12));
 		cB_Marka.setBounds(27, 216, 227, 20);
 		getContentPane().add(cB_Marka);
 		cB_Marka.addActionListener(new ActionListener() {
@@ -315,7 +354,7 @@ public class Pryntery extends JFrame{
 				
 				al_Model.add("");
 				
-				for (String path : Menu.fileInDirect(s_Path_Mictce
+				for (String path : Menu.fileInDirect(s_Path_Printers
 						+ (String) cB_Mistse.getSelectedItem()
 						+ "/" + (String) cB_Mistce1.getSelectedItem()
 						+ "/" + (String) cB_Marka.getSelectedItem())) {
@@ -334,6 +373,7 @@ public class Pryntery extends JFrame{
 				revalidate();
 			}
 		});
+		cB_Model.setFont(new Font("Trebuchet MS", Font.BOLD, 12));
 		cB_Model.setBounds(27, 272, 227, 20);
 		getContentPane().add(cB_Model);
 		cB_Model.addActionListener(new ActionListener() {
@@ -351,7 +391,7 @@ public class Pryntery extends JFrame{
 				
 				al_SN.add("");
 				
-				for (String path : Menu.fileInDirect(s_Path_Mictce
+				for (String path : Menu.fileInDirect(s_Path_Printers
 						+ (String) cB_Mistse.getSelectedItem()
 						+ "/" + (String) cB_Mistce1.getSelectedItem()
 						+ "/" + (String) cB_Marka.getSelectedItem()
@@ -373,53 +413,73 @@ public class Pryntery extends JFrame{
 			}
 		});
 		
+		cB_SN.setFont(new Font("Trebuchet MS", Font.BOLD, 12));
 		cB_SN.setBounds(27, 328, 227, 20);
-		getContentPane().add(cB_SN);		
+		getContentPane().add(cB_SN);
 		cB_SN.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				daniPoPrynteru((String) cB_Mistse.getSelectedItem(), (String) cB_Mistce1.getSelectedItem(),
-						(String) cB_Marka.getSelectedItem(), (String) cB_Model.getSelectedItem(),
-						(String) cB_SN.getSelectedItem());
-				b_prynterObrano = true ;
+				if (cB_SN.getSelectedItem().equals("")) {
+					JOptionPane.showMessageDialog(null, "Оберіть принтер");
+				}else{
+					daniPoPrynteru((String) cB_Mistse.getSelectedItem(),
+							(String) cB_Mistce1.getSelectedItem(),
+							(String) cB_Marka.getSelectedItem(),
+							(String) cB_Model.getSelectedItem(),
+							(String) cB_SN.getSelectedItem());
+					b_prynterObrano = true;
+
+					l_IN.setBounds(17, 379, 250, 14);
+					tF_IN.setBounds(27, 404, 227, 20);
+					l_IP_USB.setBounds(17, 440, 250, 14);
+					tF_IP_USB.setBounds(27, 470, 227, 20);
+					l_Stan.setBounds(283, 379, 250, 14);
+					tF_Stan.setBounds(293, 404, 227, 20);
+					l_MOL.setBounds(285, 440, 250, 14);
+					tF_MOL.setBounds(295, 470, 227, 20);
+					l_DodatkovaInfa.setBounds(561, 369, 407, 14);
+					tA_Koment.setBounds(561, 389, 407, 107);
+					b_Save.setBounds(27, 515, 941, 29);
+					p_RamkaMistce1.setBounds(17, 363, 963, 190);
+				}
 			}
 		});
 		
 		tF_IP_USB = new JTextField();
 		tF_IP_USB.setFont(new Font("Sitka Text", Font.PLAIN, 15));
 		tF_IP_USB.setHorizontalAlignment(SwingConstants.CENTER);
-		tF_IP_USB.setBounds(27, 460, 227, 20);
+//		tF_IP_USB.setBounds(27, 460, 227, 20);
 		getContentPane().add(tF_IP_USB);
 		tF_IP_USB.setColumns(10);
 		
-		JLabel l_IN = new JLabel("\u0406\u043D\u0432\u0435\u043D\u0442\u0430\u0440\u043D\u0438\u0439 \u043D\u043E\u043C\u0435\u0440: ");
-		l_IN.setBounds(17, 379, 250, 14);
+		l_IN = new JLabel("\u0406\u043D\u0432\u0435\u043D\u0442\u0430\u0440\u043D\u0438\u0439 \u043D\u043E\u043C\u0435\u0440: ");
+//		l_IN.setBounds(17, 379, 250, 14);
 		l_IN.setHorizontalAlignment(SwingConstants.CENTER);
 		l_IN.setFont(new Font("Sitka Text", Font.PLAIN, 15));
 		getContentPane().add(l_IN);
 		
 		tF_IN = new JTextField();
-		tF_IN.setBounds(27, 404, 227, 20);
+//		tF_IN.setBounds(27, 404, 227, 20);
 		tF_IN.setHorizontalAlignment(SwingConstants.CENTER);
 		tF_IN.setFont(new Font("Sitka Text", Font.PLAIN, 15));
 		getContentPane().add(tF_IN);
 		
-		JLabel l_IP_USB = new JLabel("IP / USB");
-		l_IP_USB.setBounds(17, 435, 250, 14);
+		l_IP_USB = new JLabel("IP / USB");
+//		l_IP_USB.setBounds(17, 435, 250, 14);
 		l_IP_USB.setHorizontalAlignment(SwingConstants.CENTER);
 		l_IP_USB.setFont(new Font("Sitka Text", Font.PLAIN, 15));
 		getContentPane().add(l_IP_USB);
 		
-		l_DodatkovaInfa.setBounds(541, 359, 250, 14);
+//		l_DodatkovaInfa.setBounds(561, 369, 407, 14);
 		l_DodatkovaInfa.setHorizontalAlignment(SwingConstants.CENTER);
-		l_DodatkovaInfa.setFont(new Font("Sitka Text", Font.PLAIN, 15));
-		
+		l_DodatkovaInfa.setFont(new Font("Sitka Text", Font.PLAIN, 15));		
 		getContentPane().add(l_DodatkovaInfa);
 		
 		tA_Koment.setFont(new Font("Sitka Text", Font.PLAIN, 15));
-		tA_Koment.setBounds(541, 379, 250, 126);
+//		tA_Koment.setBounds(561, 389, 407, 107);
 		getContentPane().add(tA_Koment);
 		
-		JButton b_Save = new JButton("\u0417\u0431\u0435\u0440\u0435\u0433\u0442\u0438 \u0437\u043C\u0456\u043D\u0438");
+		b_Save = new JButton("\u0417\u0431\u0435\u0440\u0435\u0433\u0442\u0438 \u0437\u043C\u0456\u043D\u0438");
+		b_Save.setFont(new Font("Sitka Text", Font.PLAIN, 15));
 		b_Save.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 
@@ -433,7 +493,7 @@ public class Pryntery extends JFrame{
 
 					// IP
 					try {
-						String s_Path_IP = s_Path_Mictce
+						String s_Path_IP = s_Path_Printers
 								+ (String) cB_Mistse.getSelectedItem() + "/"
 								+ (String) cB_Mistce1.getSelectedItem() + "/"
 								+ (String) cB_Marka.getSelectedItem() + "/"
@@ -449,7 +509,7 @@ public class Pryntery extends JFrame{
 
 					// Інв
 					try {
-						String s_Path_Inv = s_Path_Mictce
+						String s_Path_Inv = s_Path_Printers
 								+ (String) cB_Mistse.getSelectedItem() + "/"
 								+ (String) cB_Mistce1.getSelectedItem() + "/"
 								+ (String) cB_Marka.getSelectedItem() + "/"
@@ -465,18 +525,30 @@ public class Pryntery extends JFrame{
 
 					// Стан
 					try {
-						String s_Path_Stan = s_Path_Mictce
+						String s_Path_Stan = s_Path_Printers
 								+ (String) cB_Mistse.getSelectedItem() + "/"
 								+ (String) cB_Mistce1.getSelectedItem() + "/"
 								+ (String) cB_Marka.getSelectedItem() + "/"
 								+ (String) cB_Model.getSelectedItem() + "/"
 								+ (String) cB_SN.getSelectedItem() + "/Stan";
 						formatter_Stan = new Formatter(s_Path_Stan);
-						if(s_Path_Stan.equals("Працюючий")){
-							kilkistPraciyiychuhPrynteriv(true);
+						if(s_Stan.equals("Працюючий")){
+							if(tF_Stan.getText().equals("Працюючий")){
+							}else{
+								kilkistPraciyiychuhPrynteriv(false);
+							}
 						}else{
-							kilkistPraciyiychuhPrynteriv(false);
+							if(tF_Stan.getText().equals("Працюючий")){
+								kilkistPraciyiychuhPrynteriv(true);
+							}else{								
+							}
 						}
+						
+//						if(tF_Stan.getText().equals("Працюючий")){
+//							kilkistPraciyiychuhPrynteriv(true);
+//						}else{
+//							kilkistPraciyiychuhPrynteriv(false);
+//						}
 					} catch (Exception e) {
 						JOptionPane.showMessageDialog(null,
 								"Не вдалось зберегти Стан");
@@ -486,7 +558,7 @@ public class Pryntery extends JFrame{
 
 					// Koment
 					try {
-						String s_Path_Koment = s_Path_Mictce
+						String s_Path_Koment = s_Path_Printers
 								+ (String) cB_Mistse.getSelectedItem() + "/"
 								+ (String) cB_Mistce1.getSelectedItem() + "/"
 								+ (String) cB_Marka.getSelectedItem() + "/"
@@ -502,7 +574,7 @@ public class Pryntery extends JFrame{
 					
 					// МОЛ
 					try {
-						String s_Path_MOL = s_Path_Mictce
+						String s_Path_MOL = s_Path_Printers
 								+ (String) cB_Mistse.getSelectedItem() + "/"
 								+ (String) cB_Mistce1.getSelectedItem() + "/"
 								+ (String) cB_Marka.getSelectedItem() + "/"
@@ -521,41 +593,32 @@ public class Pryntery extends JFrame{
 				}
 			}
 		});
-		b_Save.setBounds(27, 520, 473, 29);
+//		b_Save.setBounds(27, 515, 941, 29);
 		getContentPane().add(b_Save);
+		
 		l_Stan.setHorizontalAlignment(SwingConstants.CENTER);
 		l_Stan.setFont(new Font("Sitka Text", Font.PLAIN, 15));
-		l_Stan.setBounds(283, 379, 250, 14);
-		
+//		l_Stan.setBounds(283, 379, 250, 14);		
 		getContentPane().add(l_Stan);
+		
 		tF_Stan.setHorizontalAlignment(SwingConstants.CENTER);
 		tF_Stan.setFont(new Font("Sitka Text", Font.PLAIN, 15));
 		tF_Stan.setColumns(10);
-		tF_Stan.setBounds(293, 404, 227, 20);		
+//		tF_Stan.setBounds(293, 404, 227, 20);		
 		getContentPane().add(tF_Stan);
 		
+        b_Delete.setFont(new Font("Sitka Text", Font.PLAIN, 15));		
         b_Delete.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
         		new PrynteryDelete(s_NameProduct);
         	}
         });
-
-//		@SuppressWarnings("serial")		// малюємо прямокутник
-//		JPanel p_Ramka = new JPanel() {
-//            @Override
-//            public void paintComponent(Graphics g) {            	
-//                Graphics2D g2 = (Graphics2D) g;
-//                Shape rect = new Rectangle(0, 0, 495, 205);
-//                g2.draw(rect);
-//            }
-//        };
-//        p_Ramka.setBounds(17, 354, 848, 206);
-//        getContentPane().add(p_Ramka);
         
        
-        b_Delete.setBounds(283, 148, 227, 23);
+        b_Delete.setBounds(293, 272, 227, 23);
         
         getContentPane().add(b_Delete);
+        b_Peremistyty.setFont(new Font("Sitka Text", Font.PLAIN, 15));
         b_Peremistyty.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
         		if(b_prynterObrano == true){
@@ -567,42 +630,41 @@ public class Pryntery extends JFrame{
         		}
         	}
         });
-        b_Peremistyty.setBounds(283, 201, 227, 23);
+        b_Peremistyty.setBounds(293, 325, 227, 23);
         
         getContentPane().add(b_Peremistyty);
         l_MOL.setHorizontalAlignment(SwingConstants.CENTER);
         l_MOL.setFont(new Font("Sitka Text", Font.PLAIN, 15));
-        l_MOL.setBounds(285, 435, 250, 14);
-        
+//      l_MOL.setBounds(285, 435, 250, 14);
         getContentPane().add(l_MOL);
+        
         tF_MOL.setHorizontalAlignment(SwingConstants.CENTER);
         tF_MOL.setFont(new Font("Sitka Text", Font.PLAIN, 15));
         tF_MOL.setColumns(10);
-        tF_MOL.setBounds(295, 460, 227, 20);
-        
+//      tF_MOL.setBounds(295, 460, 227, 20);        
         getContentPane().add(tF_MOL);
                 
-        JLabel l_textKilkistVsihPrynteriv = new JLabel("\u041A\u0456\u043B\u044C\u043A\u0456\u0441\u0442\u044C \u0432\u0441\u0456\u0445 \u043F\u0440\u0438\u043D\u0442\u0435\u0440\u0456\u0432:");
+        l_textKilkistVsihPrynteriv = new JLabel("\u041A\u0456\u043B\u044C\u043A\u0456\u0441\u0442\u044C \u0432\u0441\u0456\u0445 \u043F\u0440\u0438\u043D\u0442\u0435\u0440\u0456\u0432:");
         l_textKilkistVsihPrynteriv.setHorizontalAlignment(SwingConstants.CENTER);
         l_textKilkistVsihPrynteriv.setFont(new Font("Sitka Text", Font.PLAIN, 15));
-        l_textKilkistVsihPrynteriv.setBounds(527, 79, 250, 14);
+        l_textKilkistVsihPrynteriv.setBounds(560, 187, 299, 14);
         getContentPane().add(l_textKilkistVsihPrynteriv);
         
-        JLabel l_KilkistVsihPrynteriv = new JLabel(kilkistPrynteriv(new File(s_Path_Mictce)));
+        l_KilkistVsihPrynteriv = new JLabel(kilkistPrynteriv(new File(s_Path_Printers)));
         l_KilkistVsihPrynteriv.setHorizontalAlignment(SwingConstants.CENTER);
         l_KilkistVsihPrynteriv.setFont(new Font("Sitka Text", Font.PLAIN, 15));
-        l_KilkistVsihPrynteriv.setBounds(787, 79, 98, 14);
+        l_KilkistVsihPrynteriv.setBounds(869, 187, 98, 14);
         getContentPane().add(l_KilkistVsihPrynteriv);
         
         l_textKilkistPraciyiychuhPrynteriv.setHorizontalAlignment(SwingConstants.CENTER);
         l_textKilkistPraciyiychuhPrynteriv.setFont(new Font("Sitka Text", Font.PLAIN, 15));
-        l_textKilkistPraciyiychuhPrynteriv.setBounds(527, 104, 250, 14);        
+        l_textKilkistPraciyiychuhPrynteriv.setBounds(560, 225, 299, 14);        
         getContentPane().add(l_textKilkistPraciyiychuhPrynteriv);
         
         JLabel l_KilkistPraciyiychuhPrynteriv = new JLabel(kilkistPraciyiychuhPrynteriv());
         l_KilkistPraciyiychuhPrynteriv.setHorizontalAlignment(SwingConstants.CENTER);
         l_KilkistPraciyiychuhPrynteriv.setFont(new Font("Sitka Text", Font.PLAIN, 15));
-        l_KilkistPraciyiychuhPrynteriv.setBounds(787, 104, 98, 14);
+        l_KilkistPraciyiychuhPrynteriv.setBounds(869, 225, 98, 14);
         
         getContentPane().add(l_KilkistPraciyiychuhPrynteriv);
         
@@ -621,11 +683,12 @@ public class Pryntery extends JFrame{
         tF_poshukSN.setHorizontalAlignment(SwingConstants.CENTER);
         tF_poshukSN.setFont(new Font("Sitka Text", Font.ITALIC, 12));
         tF_poshukSN.setColumns(10);
-        tF_poshukSN.setBounds(541, 272, 227, 20);
+        tF_poshukSN.setBounds(293, 104, 227, 20);
         getContentPane().add(tF_poshukSN);
         
 		JButton b_poshukSN = new JButton(
 				"\u0412\u0438\u043A\u043E\u043D\u0430\u0442\u0438 \u043F\u043E\u0448\u0443\u043A");
+		b_poshukSN.setFont(new Font("Sitka Text", Font.PLAIN, 15));
 		b_poshukSN.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 
@@ -643,11 +706,84 @@ public class Pryntery extends JFrame{
 				} else {
 					poshukPruntera(tF_poshukSN.getText());
 				}
-
+				
+				l_IN.setBounds(17, 379, 250, 14);
+				tF_IN.setBounds(27, 404, 227, 20);
+				l_IP_USB.setBounds(17, 440, 250, 14);
+				tF_IP_USB.setBounds(27, 470, 227, 20);
+				l_Stan.setBounds(283, 379, 250, 14);
+				tF_Stan.setBounds(293, 404, 227, 20);
+				l_MOL.setBounds(285, 440, 250, 14);
+		        tF_MOL.setBounds(295, 470, 227, 20);
+		        l_DodatkovaInfa.setBounds(561, 369, 407, 14);
+		        tA_Koment.setBounds(561, 389, 407, 107);
+		        b_Save.setBounds(27, 515, 941, 29);
+		        p_RamkaMistce1.setBounds(17, 363, 963, 190);
 			}
 		});
-        b_poshukSN.setBounds(783, 271, 136, 23);
-        getContentPane().add(b_poshukSN);
+		b_poshukSN.setBounds(293, 139, 227, 23);
+		getContentPane().add(b_poshukSN);
+
+		p_RamkaMistce1.setToolTipText("");
+//		p_RamkaMistce1.setBounds(17, 363, 963, 190);
+		getContentPane().add(p_RamkaMistce1);
+		
+		JLabel label = new JLabel("\u041F\u043E\u0448\u0443\u043A \u0437\u0430 \u0441\u0435\u0440\u0456\u0439\u043D\u0438\u0439 \u043D\u043E\u043C\u0435\u0440\u043E\u043C");
+		label.setHorizontalAlignment(SwingConstants.LEFT);
+		label.setFont(new Font("Trebuchet MS", Font.PLAIN, 12));
+		label.setBounds(293, 51, 227, 14);
+		getContentPane().add(label);
+		
+		@SuppressWarnings("serial")
+		JPanel p_RamkaMistce = new JPanel() {
+			public void paintComponent(Graphics g) {
+				Graphics2D g2 = (Graphics2D) g;
+				Shape rect = new Rectangle(0, 0, 249, 285);
+				g2.draw(rect);
+			}
+		};
+		p_RamkaMistce.setToolTipText("");
+		p_RamkaMistce.setBounds(17, 70, 250, 286);
+		getContentPane().add(p_RamkaMistce);
+		
+		JLabel l_NazvaRamky = new JLabel("\u041F\u043E\u0448\u0443\u043A \u0437\u0430 \u043C\u0456\u0441\u0446\u0435\u043C");
+		l_NazvaRamky.setHorizontalAlignment(SwingConstants.LEFT);
+		l_NazvaRamky.setFont(new Font("Trebuchet MS", Font.PLAIN, 12));
+		l_NazvaRamky.setBounds(27, 51, 232, 14);
+		getContentPane().add(l_NazvaRamky);
+		
+		l_PoshukSN.setHorizontalAlignment(SwingConstants.CENTER);
+		l_PoshukSN.setFont(new Font("Sitka Text", Font.PLAIN, 15));
+		l_PoshukSN.setBounds(293, 79, 227, 14);
+		
+		getContentPane().add(l_PoshukSN);
+		p_RamkaSN.setToolTipText("");
+		p_RamkaSN.setBounds(283, 70, 250, 107);		
+		getContentPane().add(p_RamkaSN);
+		b_Kartryji.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if((String) cB_Marka.getSelectedItem() == null || (String) cB_Model.getSelectedItem() == null){
+					new Cartridges(s_NameProduct, "", "");
+				}else{
+					new Cartridges(s_NameProduct, (String) cB_Marka.getSelectedItem(), (String) cB_Model.getSelectedItem());
+				}				
+				setVisible(false);
+			}
+		});
+		b_Kartryji.setFont(new Font("Sitka Text", Font.PLAIN, 15));
+		b_Kartryji.setBounds(663, 91, 227, 23);
+		
+		getContentPane().add(b_Kartryji);
+		b_Remonty.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				new Remonty(s_NameProduct);
+				setVisible(false);
+			}
+		});
+		b_Remonty.setFont(new Font("Sitka Text", Font.PLAIN, 15));
+		b_Remonty.setBounds(663, 131, 227, 23);
+		
+		getContentPane().add(b_Remonty);
 		
 		// l_fon = new JLabel("");
 		// l_fon.setFont(new Font("Sitka Text", Font.PLAIN, 15));
@@ -698,8 +834,10 @@ public class Pryntery extends JFrame{
 			i_k = Integer.parseInt(s_k);
 			
 			if(b_stan == true){
+				System.out.println("i_k++ " + i_k);
 				i_k++;
 			}else{
+				System.out.println("i_k-- " +i_k);
 				i_k--;
 			}
 			
@@ -754,7 +892,7 @@ public class Pryntery extends JFrame{
 		
 		// IP
 		try {
-			FileInputStream file_IP = new FileInputStream(new File(s_Path_Mictce
+			FileInputStream file_IP = new FileInputStream(new File(s_Path_Printers
 					+ s_Mistce + "/"
 					+ s_Mistce1 + "/"
 					+ s_Marka + "/"
@@ -777,7 +915,7 @@ public class Pryntery extends JFrame{
 		
 		// Комент
 		try {
-			FileInputStream file_Koment = new FileInputStream(new File(s_Path_Mictce
+			FileInputStream file_Koment = new FileInputStream(new File(s_Path_Printers
 					+ s_Mistce + "/"
 					+ s_Mistce1 + "/"
 					+ s_Marka + "/"
@@ -799,7 +937,7 @@ public class Pryntery extends JFrame{
 		
 		// Інв
 		try {
-			FileInputStream file_Inv = new FileInputStream(new File(s_Path_Mictce
+			FileInputStream file_Inv = new FileInputStream(new File(s_Path_Printers
 					+ s_Mistce + "/"
 					+ s_Mistce1 + "/"
 					+ s_Marka + "/"
@@ -822,7 +960,7 @@ public class Pryntery extends JFrame{
 		
 		// Стан
 		try {
-			FileInputStream file_Stan = new FileInputStream(new File(s_Path_Mictce
+			FileInputStream file_Stan = new FileInputStream(new File(s_Path_Printers
 					+ s_Mistce + "/"
 					+ s_Mistce1 + "/"
 					+ s_Marka + "/"
@@ -845,7 +983,7 @@ public class Pryntery extends JFrame{
 		
 			// MOЛ
 			try {
-				FileInputStream file_MOL = new FileInputStream(new File(s_Path_Mictce
+				FileInputStream file_MOL = new FileInputStream(new File(s_Path_Printers
 						+ s_Mistce + "/"
 						+ s_Mistce1 + "/"
 						+ s_Marka + "/"
@@ -867,9 +1005,10 @@ public class Pryntery extends JFrame{
 		} catch (Exception e1) {}
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	void poshukPruntera (String s_SN_new){
 		
-		for (File for_Mistce : new File(s_Path_Mictce).listFiles()) {      
+		for (File for_Mistce : new File(s_Path_Printers).listFiles()) {      
 			for (File for_Mistce1 : for_Mistce.listFiles()) {
 				for (File for_Marka : for_Mistce1.listFiles()) {
 					for (File for_Model : for_Marka.listFiles()) {
@@ -886,7 +1025,7 @@ public class Pryntery extends JFrame{
 								
 								String s_for_SN = "" + for_SN;
 
-								String s_Mistce = s_for_SN.substring(21, i_for_Mistce);
+								String s_Mistce = s_for_SN.substring(30, i_for_Mistce);
 								String s_Mistce1 = s_for_SN.substring(i_for_Mistce + 1, i_for_Mistce1);
 								String s_Marka = s_for_SN.substring(i_for_Mistce1 + 1, i_for_Marka);
 								String s_Model = s_for_SN.substring(i_for_Marka + 1, i_for_Model);										
@@ -921,11 +1060,11 @@ public class Pryntery extends JFrame{
 
 								
 								 if(s_SN_new.equals(s_SN)){
-//										 cB_Mistse.setModel(new DefaultComboBoxModel(s_mas_Mistce));
-//										 cB_Mistce1.setModel(new DefaultComboBoxModel(s_mas_Mistce1));
-//										 cB_Marka.setModel(new DefaultComboBoxModel(s_mas_Marka));
-//										 cB_Model.setModel(new DefaultComboBoxModel(s_mas_Model));
-//										 cB_SN.setModel(new DefaultComboBoxModel(s_mas_SN));
+										 cB_Mistse.setModel(new DefaultComboBoxModel(s_mas_Mistce));
+										 cB_Mistce1.setModel(new DefaultComboBoxModel(s_mas_Mistce1));
+										 cB_Marka.setModel(new DefaultComboBoxModel(s_mas_Marka));
+										 cB_Model.setModel(new DefaultComboBoxModel(s_mas_Model));
+										 cB_SN.setModel(new DefaultComboBoxModel(s_mas_SN));
 										 
 										 daniPoPrynteru(s_Mistce, s_Mistce1, s_Marka, s_Model, s_SN);
 								 }
@@ -937,9 +1076,7 @@ public class Pryntery extends JFrame{
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static void pisliaPeremishchenia(String s_Mistce,
-
-			String s_Mistce1) {
+	public static void pisliaPeremishchenia(String s_Mistce, String s_Mistce1) {
 		
 		al_Mistce.clear();
 		al_Mistce.add(s_Mistce);
@@ -952,5 +1089,4 @@ public class Pryntery extends JFrame{
 		cB_Mistse.setModel(new DefaultComboBoxModel(s_mas_Mistce));
 		cB_Mistce1.setModel(new DefaultComboBoxModel(s_mas_Mistce1));
 	}
-	
 }
