@@ -221,25 +221,24 @@ public class Pryntery extends JFrame{
 		l_SN.setHorizontalAlignment(SwingConstants.CENTER);
 		l_SN.setFont(new Font("Sitka Text", Font.PLAIN, 15));
 		getContentPane().add(l_SN);
-		b_Add.setFont(new Font("Sitka Text", Font.PLAIN, 15));
 		
+		b_Add.setFont(new Font("Sitka Text", Font.PLAIN, 15));		
 		b_Add.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				new PrynteryAdd(s_NameProduct);
 			}
 		});
 		b_Add.setBounds(293, 216, 227, 23);
-
 		getContentPane().add(b_Add);
+		
 		l_Mistse2.setBounds(17, 135, 250, 14);
 		l_Mistse2.setHorizontalAlignment(SwingConstants.CENTER);
 		l_Mistse2.setFont(new Font("Sitka Text", Font.PLAIN, 15));
+		
 		l_Mistse.setBounds(17, 79, 250, 14);
-
 		l_Mistse.setHorizontalAlignment(SwingConstants.CENTER);
 		l_Mistse.setFont(new Font("Sitka Text", Font.PLAIN, 15));
 		getContentPane().add(l_Mistse);
-
 		getContentPane().add(cB_Mistse);
 		getContentPane().add(cB_Mistse);
 		cB_Mistse.addActionListener(new ActionListener() {
@@ -486,7 +485,7 @@ public class Pryntery extends JFrame{
 				// Підтвердження  на основі додаткового вікна JOptionPane.showOptionDialog
 				Object[] options_Save = { "Так", "Ні" };
 				int i_Save = JOptionPane.showOptionDialog(null,
-						"Зберегти зміни ?", "Подтверждение",
+						"Зберегти зміни ?", "Підтвердження",
 						JOptionPane.YES_NO_OPTION,
 						JOptionPane.QUESTION_MESSAGE, null, options_Save, null);
 				if (i_Save == JOptionPane.YES_OPTION) {

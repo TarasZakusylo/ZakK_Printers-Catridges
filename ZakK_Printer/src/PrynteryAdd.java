@@ -523,18 +523,6 @@ public class PrynteryAdd extends JFrame {
 		tF_Stan.setColumns(10);
 		tF_Stan.setBounds(27, 449, 227, 20);
 		getContentPane().add(tF_Stan);
-
-		// @SuppressWarnings("serial") // малюємо прямокутник
-		// JPanel p_Ramka = new JPanel() {
-		// @Override
-		// public void paintComponent(Graphics g) {
-		// Graphics2D g2 = (Graphics2D) g;
-		// Shape rect = new Rectangle(0, 0, 489, 195);
-		// g2.draw(rect);
-		// }
-		// };
-		// p_Ramka.setBounds(17, 329, 490, 197);
-		// getContentPane().add(p_Ramka);
 		
 		b_Misce.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
